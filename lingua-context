@@ -6,31 +6,36 @@ use Data::Dumper;
 use Lingua::ConText qw( applyContext );
 
 # Bucket for words we have seen.
-my %seen;
+my %seen_words;
 
-# Modify the known $phrase bits.
-for my $type ( keys %{ $Lingua::ConText::phrase } ) {
-    if ( ref $type eq 'ARRAY' ) {
-        for my $fragment ( @$type ) {
-            # TODO Replace the non-stopwords that haven't been seen.
+# Traverse the L::CT$phrase and create a new one.
+my $old_phrase = $Lingua::ConText::phrase;
+my $new_phrase = traverse($old_phrase);
+use Data::Dumper;warn
+Data::Dumper->new([$new_phrase])->Indent(1)->Terse(1)->Quotekeys(0)->Sortkeys(1)->Dump;
+
+sub traverse {
+    my $element = shift;
+
+    if (ref $element eq 'HASH') {
+        for my $key (sort keys %$element) {
+            $new_phrase->{$key} = traverse($element->{$key});
         }
     }
-    else {
-        # TODO Recurse!
+    elsif ( ref $element eq 'ARRAY' ) {
+        push @{ $new_phrase->{$_} }, @$element;
     }
+    else {
+        warn "Element: $element\n";
+    }
+
+    return $element;
 }
+
 __END__
 my( $text, $context ) = @ARGV;
 die "Usage: perl $0 'some text' context\n" unless $text and $context;
-
 my %result;
-@result{qw(
-    concept
-    sentence
-    negation_context
-    temporality_context
-    experiencer_context
-)} = @{ applyContext( $context, $text ) };
-
-use Data::Dumper;warn
-Data::Dumper->new([\%result])->Indent(1)->Terse(1)->Quotekeys(0)->Sortkeys(1)->Dump;
+@result{qw( concept sentence negation_context temporality_context experiencer_context)}
+    = @{ applyContext( $context, $text ) };
+use Data::Dumper;warn Data::Dumper->new([\%result])->Indent(1)->Terse(1)->Quotekeys(0)->Sortkeys(1)->Dump;
