@@ -15,18 +15,24 @@ use Data::Dumper;warn
 Data::Dumper->new([$new_phrase])->Indent(1)->Terse(1)->Quotekeys(0)->Sortkeys(1)->Dump;
 
 sub traverse {
-    my $element = shift;
+    my( $element, $item ) = @_;
 
     if (ref $element eq 'HASH') {
         for my $key (sort keys %$element) {
-            $new_phrase->{$key} = traverse($element->{$key});
+            $new_phrase->{$key} = traverse($element->{$key}, $key);
         }
     }
     elsif ( ref $element eq 'ARRAY' ) {
-        push @{ $new_phrase->{$_} }, @$element;
+#        push @{ $new_phrase->{$item} }, @$element;
+        for my $frag ( @$element ) {
+            # TODO Prompt to replace frags.
+            $frag =~ s/history/fetish/;
+            push @{ $new_phrase->{$item} }, $frag;
+        }
     }
     else {
-        warn "Element: $element\n";
+        # This should never happen.
+        warn "Element: $element, Item: $item\n";
     }
 
     return $element;
