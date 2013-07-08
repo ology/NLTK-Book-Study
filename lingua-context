@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Data::Dumper;
+
+use Lingua::ConText qw( applyContext );
+
+# Bucket for words we have seen.
+my %seen;
+
+# Modify the known $phrase bits.
+for my $type ( keys %{ $Lingua::ConText::phrase } ) {
+    if ( ref $type eq 'ARRAY' ) {
+        for my $fragment ( @$type ) {
+            # TODO Replace the non-stopwords that haven't been seen.
+        }
+    }
+    else {
+        # TODO Recurse!
+    }
+}
+__END__
+my( $text, $context ) = @ARGV;
+die "Usage: perl $0 'some text' context\n" unless $text and $context;
+
+my %result;
+@result{qw(
+    concept
+    sentence
+    negation_context
+    temporality_context
+    experiencer_context
+)} = @{ applyContext( $context, $text ) };
+
+use Data::Dumper;warn
+Data::Dumper->new([\%result])->Indent(1)->Terse(1)->Quotekeys(0)->Sortkeys(1)->Dump;
