@@ -82,3 +82,39 @@ head = pre_period_positions[-1] + 1
 tail = post_period_positions[0] + 1
 text9[head:tail]
 
+# 18. Vocab of initial sentences.
+sorted(set(sent1 + sent2 + sent3 + sent4 + sent5 + sent6 + sent7 + sent8))
+
+# 19.
+sorted(set([w.lower() for w in text1])) # "set of lc"
+sorted([w.lower() for w in set(text1)]) # "lc of set" <- May have dups.
+
+# 20.
+# >>> '1'.isupper()
+#False
+#>>> not '1'.islower()
+#True
+#>>> 'a'.isupper()
+#False
+#>>> not 'a'.islower()
+#False
+#>>> 'A'.isupper()
+#True
+#>>> not 'A'.islower()
+#True
+
+# 21.
+text2[-2:]
+
+# 22.
+fdist5 = FreqDist(set([w for w in text5 if w.isalpha() and len(w) == 4]))
+vocab5 = fdist5.keys()
+vocab5[:50]
+
+# 26.
+def avg_word_len(text):
+    v = set([w.lower() for w in text if w.isalpha()])
+    t = sum([len(w) for w in v])
+    return t / len(v)
+
+avg_word_len(text1) # 7.43 chars
