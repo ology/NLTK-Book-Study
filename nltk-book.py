@@ -61,19 +61,20 @@ tricky = sorted([w for w in set(text2) if 'cie' in w or 'cei' in w])
 for word in tricky:
     print word,
 
-# 1.8 Exercises
+# 1.8 Exercises:
+# 6.
 text2.dispersion_plot(['Elinor','Marianne','Edward','Willoughby'])
-# Monty Python speakers:
+# 6 & 23. Monty Python speakers:
 text6.dispersion_plot([w for w in vocab6 if w.isupper() and len(w) > 2][:21]) 
 
-# Locating all instances of a word in a text:
+# 14. Locating all instances of a word in a text:
 [i for i, w in enumerate(sent3) if w == "the"]
 
-# List of words with 3 or more repeated letters.
+# 15. List of words with 3 or more repeated letters.
 import re
 [w for w in set(text5) if re.findall(r'((\w)\2{2,})', w)]
 
-# First sentence in "The Man Who Was Thursday" containing the word, sunset.
+# 17. First sentence in "The Man Who Was Thursday" containing the word, sunset.
 word_positions = [i for i, w in enumerate(text9) if w == 'sunset']
 pre_period_positions = [i for i, w in enumerate(text9) if w == '.' and i < word_positions[0]]
 post_period_positions = [i for i, w in enumerate(text9) if w == '.' and i > word_positions[0]]
