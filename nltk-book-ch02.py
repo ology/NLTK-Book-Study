@@ -74,3 +74,31 @@ for m in metals:
     vocabm = fdistm.keys()
     vocabm[:20]
 
+# Inaugural Address Corpus
+from nltk.corpus import inaugural
+inaugural.fileids()
+
+def cond_freq_dist(text, target1, target2):
+    cfd = nltk.ConditionalFreqDist(
+        (target, fileid[:4])
+        for fileid in text.fileids()
+        for w in text.words(fileid)
+        for target in [target1, target2]
+        if w.lower().startswith(target))
+    cfd.plot()
+
+cond_freq_dist(inaugural, 'america', 'citizen')
+cond_freq_dist(inaugural, 'force', 'security')
+cond_freq_dist(inaugural, 'freedom', 'security')
+cond_freq_dist(inaugural, 'terror', 'safe')
+
+# Corpora in Other Languages
+from nltk.corpus import udhr
+languages = ['Chickasaw', 'English', 'German_Deutsch', 'Greenlandic_Inuktikut',
+    'Hungarian_Magyar', 'Ibibio_Efik']
+cfd = nltk.ConditionalFreqDist(
+    (lang, len(word))
+    for lang in languages
+    for word in udhr.words(lang + '-Latin1'))
+cfd.plot(cumulative=True)
+
