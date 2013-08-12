@@ -118,3 +118,4 @@ def avg_word_len(text):
     return t / len(v)
 
 avg_word_len(text1) # 7.43 chars
+
