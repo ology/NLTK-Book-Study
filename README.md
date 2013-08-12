@@ -1,4 +1,4 @@
-NLTK-Book-Study
-===============
+NLTK Book Self-study
+====================
 
-Learning http://nltk.org/book/ by hand
+Enhanced self-study of http://nltk.org/book/
