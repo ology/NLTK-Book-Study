@@ -95,9 +95,16 @@ cond_freq_dist(inaugural, 'terror', 'safe')
 
 # Corpora in Other Languages
 from nltk.corpus import udhr
-# TODO How to list all languages?
+
+# List languages.
+len([latin for latin in udhr.fileids() if latin.endswith('-Latin1')])
+190
+len([utf8 for utf8 in udhr.fileids() if utf8.endswith('-UTF8')])
+93
+
 languages = ['Chickasaw', 'English', 'German_Deutsch', 'Greenlandic_Inuktikut',
     'Hungarian_Magyar', 'Ibibio_Efik']
+
 def udhr_cond_freq_dist(udhr, languages):
     cfd = nltk.ConditionalFreqDist(
         (lang, len(word))
