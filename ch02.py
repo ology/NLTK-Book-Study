@@ -78,13 +78,14 @@ for m in metals:
 from nltk.corpus import inaugural
 inaugural.fileids()
 
+# TODO What is a "nltk.ConditionalFreqDist" anyway?
 def cond_freq_dist(text, target1, target2):
     cfd = nltk.ConditionalFreqDist(
-        (target, fileid[:4])
-        for fileid in text.fileids()
-        for w in text.words(fileid)
-        for target in [target1, target2]
-        if w.lower().startswith(target))
+        (target, fileid[:4])                # word-target, address-year
+        for fileid in text.fileids()        # inagural address
+        for w in text.words(fileid)         # all words in the address
+        for target in [target1, target2]    # for each word
+        if w.lower().startswith(target))    # ...that is lower, etc.
     cfd.plot()
 
 cond_freq_dist(inaugural, 'america', 'citizen')
@@ -94,6 +95,7 @@ cond_freq_dist(inaugural, 'terror', 'safe')
 
 # Corpora in Other Languages
 from nltk.corpus import udhr
+# TODO How to list all languages?
 languages = ['Chickasaw', 'English', 'German_Deutsch', 'Greenlandic_Inuktikut',
     'Hungarian_Magyar', 'Ibibio_Efik']
 cfd = nltk.ConditionalFreqDist(
