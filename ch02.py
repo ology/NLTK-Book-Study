@@ -141,3 +141,34 @@ words[:10]
 sents = udhr.sents('English-Latin1')
 sents[0]
 #[u'Universal', u'Declaration', u'of', u'Human', u'Rights', u'Preamble', u'Whereas' ...
+
+# Loading your own Corpus
+from nltk.corpus import PlaintextCorpusReader
+corpus_root = '/usr/share/dict'
+wordlists = PlaintextCorpusReader(corpus_root, '.*')
+wordlists.fileids()
+wordlists.words('connectives')
+
+corpus_root = '/Users/gene/Backed/Documents'
+taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
+taow.fileids()
+['artofwar.txt']
+taow.words()
+['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
+len(taow.words())
+13038
+len(taow.sents())
+943
+len([s for s in taow.sents() if 'enemy' in s])
+111
+len([s for s in taow.sents() if 'ally' in s])
+2
+len([s for s in taow.sents() if 'allies' in s])
+3
+len([s for s in taow.sents() if 'spy' in s])
+8
+len([s for s in taow.sents() if 'spies' in s])
+11
+
+# 2.2 Conditional Frequency Distributions
+
