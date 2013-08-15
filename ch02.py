@@ -133,3 +133,10 @@ def udhr_cond_freq_dist(udhr, languages):
 
 udhr_cond_freq_dist(udhr, languages)
 
+# Parsing methods.
+raw = udhr.raw('English-Latin1')
+raw[:50]
+words = udhr.words('English-Latin1')
+words[:10]
+sents[0]
+#[u'Universal', u'Declaration', u'of', u'Human', u'Rights', u'Preamble', u'Whereas' ...
