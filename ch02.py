@@ -94,6 +94,7 @@ cond_freq_dist(inaugural, 'freedom', 'security')
 cond_freq_dist(inaugural, 'terror', 'safe')
 
 # Corpora in Other Languages
+import nltk
 from nltk.corpus import udhr
 
 # List languages.
@@ -101,14 +102,31 @@ len([latin for latin in udhr.fileids() if latin.endswith('-Latin1')])
 190
 len([utf8 for utf8 in udhr.fileids() if utf8.endswith('-UTF8')])
 93
+[latin for latin in udhr.fileids() if 'french' in latin.lower()]
+['French_Francais-Latin1']
 
-languages = ['Chickasaw', 'English', 'German_Deutsch', 'Greenlandic_Inuktikut',
-    'Hungarian_Magyar', 'Ibibio_Efik']
+languages = [
+    'English',
+    'French',
+    'German',
+    'Italian',
+    'Spanish',
+]
 
+# Nested loop to get filenames.
+files = []
+for file in udhr.fileids():
+    for lang in languages:
+        if lang in file:
+            files.append(file)
+
+# ConditionalFreqDist for words in the given languages.
 def udhr_cond_freq_dist(udhr, languages):
     cfd = nltk.ConditionalFreqDist(
         (lang, len(word))
-        for lang in languages
-        for word in udhr.words(lang + '-Latin1'))
+        for file in udhr.fileids()
+        for lang in languages if lang in file
+        for word in udhr.words(file))
     cfd.plot(cumulative=True)
 
+udhr_cond_freq_dist(udhr, languages)
