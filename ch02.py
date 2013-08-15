@@ -119,6 +119,8 @@ for file in udhr.fileids():
     for lang in languages:
         if lang in file:
             files.append(file)
+# List comprehension of same:
+[file for file in udhr.fileids() for lang in languages if lang in file]
 
 # ConditionalFreqDist for words in the given languages.
 def udhr_cond_freq_dist(udhr, languages):
@@ -127,6 +129,7 @@ def udhr_cond_freq_dist(udhr, languages):
         for file in udhr.fileids()
         for lang in languages if lang in file
         for word in udhr.words(file))
-    cfd.plot(cumulative=True)
+    cfd.plot()
 
 udhr_cond_freq_dist(udhr, languages)
+
