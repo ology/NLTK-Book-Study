@@ -98,9 +98,9 @@ from nltk.corpus import udhr
 
 # List languages.
 len([latin for latin in udhr.fileids() if latin.endswith('-Latin1')])
-190
+#190
 len([utf8 for utf8 in udhr.fileids() if utf8.endswith('-UTF8')])
-93
+#93
 [latin for latin in udhr.fileids() if 'french' in latin.lower()]
 ['French_Francais-Latin1']
 
@@ -150,23 +150,23 @@ wordlists.words('connectives')
 corpus_root = '/Users/gene/Backed/Documents'
 taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
 taow.fileids()
-['artofwar.txt']
+#['artofwar.txt']
 taow.words()
-['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
+#['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
 len(taow.words())
-13038
+#13038
 len(taow.sents())
-943
+#943
 len([s for s in taow.sents() if 'enemy' in s])
-111
+#111
 len([s for s in taow.sents() if 'ally' in s])
-2
+#2
 len([s for s in taow.sents() if 'allies' in s])
-3
+#3
 len([s for s in taow.sents() if 'spy' in s])
-8
+#8
 len([s for s in taow.sents() if 'spies' in s])
-11
+#11
 
 # 2.2 Conditional Frequency Distributions
 from nltk.corpus import brown
@@ -188,11 +188,11 @@ cfd
 cfd.conditions()
 cfd[cats[0]]
 cfd[cats[1]]
-<FreqDist with 3233 samples and 14470 outcomes>
+#<FreqDist with 3233 samples and 14470 outcomes>
 len(list(cfd[cats[1]]))
-3233
+#3233
 cfd[cats[1]]['could']
-49
+#49
 
 # Plotting and Tabulating Distributions
 from nltk.corpus import udhr
@@ -224,4 +224,39 @@ cfd = nltk.ConditionalFreqDist(
 days = [day + 'day' for day in ['Mon','Tues','Wednes','Thurs','Fri','Satur','Sun']]
 cfd.tabulate(samples=days)
 cfd.plot(samples=days)
+
+# Generating Bigram Text
+f = 'english-kjv.txt'
+w = nltk.corpus.genesis.words(f)
+b = nltk.bigrams(w)
+cfd = nltk.ConditionalFreqDist(b)
+
+def generate_model(cfdist, word, num=15):
+    for i in range(num):
+        print word,
+        word = cfdist[word].max() # XXX max() renders loops
+
+generate_model(cfd, 'living')
+
+f = 'carroll-alice.txt'
+w = nltk.corpus.gutenberg.words(f)
+b = nltk.bigrams(w)
+cfd = nltk.ConditionalFreqDist(b)
+cfd['rabbit']
+#<FreqDist with 3 samples and 5 outcomes>
+cfd['Rabbit']
+#<FreqDist with 30 samples and 45 outcomes>
+print cfd['Rabbit']
+#<FreqDist: ',': 8, "'": 4, 'blew': 2, 'came': 2, 'read': 2, 'say': 2, 'was': 2, '-': 1, '.': 1, ':': 1, ...>
+generate_model(cfd, 'Rabbit')
+# XXX Errors? ^^^
+
+from nltk.corpus import PlaintextCorpusReader
+corpus_root = '/Users/gene/Backed/Documents'
+taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
+b = nltk.bigrams(taow.words())
+len(b)
+#13037
+cfd = nltk.ConditionalFreqDist(b)
+generate_model(cfd, 'enemy')
 
