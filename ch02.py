@@ -249,7 +249,6 @@ cfd['Rabbit']
 print cfd['Rabbit']
 #<FreqDist: ',': 8, "'": 4, 'blew': 2, 'came': 2, 'read': 2, 'say': 2, 'was': 2, '-': 1, '.': 1, ':': 1, ...>
 generate_model(cfd, 'Rabbit')
-# XXX Errors? ^^^
 
 from nltk.corpus import PlaintextCorpusReader
 corpus_root = '/Users/gene/Backed/Documents'
@@ -259,4 +258,4 @@ len(b)
 #13037
 cfd = nltk.ConditionalFreqDist(b)
 generate_model(cfd, 'enemy')
-
+# enemy ' s own men , and the enemy ' s own men , and
