@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # -- coding: utf-8 --
+import nltk
 
 # ------------------------------------------------------------------------------
 # Work through the http://nltk.org/book/
@@ -78,7 +79,6 @@ for m in metals:
 from nltk.corpus import inaugural
 inaugural.fileids()
 
-# TODO What is a "nltk.ConditionalFreqDist" anyway?
 def cond_freq_dist(text, target1, target2):
     cfd = nltk.ConditionalFreqDist(
         (target, fileid[:4])                # word-target, address-year
@@ -94,7 +94,6 @@ cond_freq_dist(inaugural, 'freedom', 'security')
 cond_freq_dist(inaugural, 'terror', 'safe')
 
 # Corpora in Other Languages
-import nltk
 from nltk.corpus import udhr
 
 # List languages.
@@ -130,7 +129,6 @@ def udhr_cond_freq_dist(udhr, languages):
         for lang in languages if lang in file
         for word in udhr.words(file))
     cfd.plot()
-
 udhr_cond_freq_dist(udhr, languages)
 
 # Parsing methods.
@@ -171,4 +169,59 @@ len([s for s in taow.sents() if 'spies' in s])
 11
 
 # 2.2 Conditional Frequency Distributions
+from nltk.corpus import brown
+cats = ['religion', 'science_fiction']
+#cfd = nltk.ConditionalFreqDist(
+#    (genre, word)
+#    for genre in cats
+#    for word in brown.words(categories=genre))
+genre_word = [
+    (genre, word)
+    for genre in cats
+    for word in brown.words(categories=genre)
+]
+len(genre_word)
+genre_word[:4]
+genre_word[-4:]
+cfd = nltk.ConditionalFreqDist(genre_word)
+cfd
+cfd.conditions()
+cfd[cats[0]]
+cfd[cats[1]]
+<FreqDist with 3233 samples and 14470 outcomes>
+len(list(cfd[cats[1]]))
+3233
+cfd[cats[1]]['could']
+49
+
+# Plotting and Tabulating Distributions
+from nltk.corpus import udhr
+def udhr_cond_freq_dist(udhr, languages):
+    return nltk.ConditionalFreqDist(
+        (lang, len(word))
+        for file in udhr.fileids()
+        for lang in languages if lang in file
+        for word in udhr.words(file))
+languages = [
+    'English',
+    'French',
+    'German',
+    'Italian',
+    'Spanish',
+]
+langs = ['English', 'German']
+cfd = udhr_cond_freq_dist(udhr, languages)
+cfd.tabulate(conditions=langs, samples=range(1,10), cumulative=True)
+
+# Your Turn
+from nltk.corpus import brown
+cats = brown.categories() #['news', 'religion', 'science_fiction']
+cfd = nltk.ConditionalFreqDist(
+    (genre, word)
+    for genre in cats
+    for word in brown.words(categories=genre)
+)
+days = [day + 'day' for day in ['Mon','Tues','Wednes','Thurs','Fri','Satur','Sun']]
+cfd.tabulate(samples=days)
+cfd.plot(samples=days)
 
