@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 # -- coding: utf-8 --
 import nltk
+from __future__ import division
 
 # ------------------------------------------------------------------------------
 # Work through the http://nltk.org/book/
@@ -259,3 +260,79 @@ len(b)
 cfd = nltk.ConditionalFreqDist(b)
 generate_model(cfd, 'enemy')
 # enemy ' s own men , and the enemy ' s own men , and
+
+# Functions
+f = open('/Users/gene/Backed/Documents/artofwar.txt')
+raw = f.read()
+def lexical_diversity(text):
+    word_count = len(text)
+    vocab_size = len(set(text))
+    lexical_diversity = word_count / vocab_size
+    return lexical_diversity
+lexical_diversity(raw)
+
+def plural(word):
+    if word.endswith('y'):
+        return word[:-1] + 'ies'
+    elif word[-1] in 'sx' or word[-2:] in ['sh', 'ch']:
+        return word + 'es'
+    elif word.endswith('an'):
+        return word[:-2] + 'en'
+    else:
+        return word + 's'
+
+plural('boy')
+#'boies'
+plural('fan')
+#'fen'
+
+# Modules
+# local import:
+from textproc import plural
+plural('boy')
+#'boies'
+plural('fan')
+#'fen'
+
+# Wordlist Corpora
+def unusual_words(text):
+    text_vocab = set(w.lower() for w in text if w.isalpha())
+    english_vocab = set(w.lower() for w in nltk.corpus.words.words())
+    unusual = text_vocab.difference(english_vocab)
+    return sorted(unusual)
+
+unusual_words(nltk.corpus.gutenberg.words('austen-sense.txt'))
+
+from nltk.corpus import stopwords
+stopwords.words('english')
+
+def content_fraction(text):
+    stopwords = nltk.corpus.stopwords.words('english')
+    content = [w for w in tokens if w.isalpha() and w.lower() not in stopwords]
+    return len(content) / len(text)
+
+content_fraction(nltk.corpus.reuters.words())
+
+# More AoW fiddling.
+f = open('/Users/gene/Backed/Documents/artofwar.txt')
+raw = f.read()
+stopwords = nltk.corpus.stopwords.words('english')
+tokens = nltk.word_tokenize(raw)
+content = [w for w in tokens if w.isalpha() and w.lower() not in stopwords]
+len(stopwords)
+#127
+len(tokens)
+#11976
+len(content)
+#4616
+content_fraction(tokens)
+#0.385437541750167
+
+# Word Puzzle
+puzzle_letters = nltk.FreqDist('egivrvonl')
+obligatory = 'r'
+wordlist = nltk.corpus.words.words()
+[w for w in wordlist if len(w) >= 6
+                     and obligatory in w
+                     and nltk.FreqDist(w) <= puzzle_letters]
+
