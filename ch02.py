@@ -313,21 +313,6 @@ def content_fraction(text):
 
 content_fraction(nltk.corpus.reuters.words())
 
-# More AoW fiddling.
-f = open('/Users/gene/Backed/Documents/artofwar.txt')
-raw = f.read()
-stopwords = nltk.corpus.stopwords.words('english')
-tokens = nltk.word_tokenize(raw)
-content = [w for w in tokens if w.isalpha() and w.lower() not in stopwords]
-len(stopwords)
-#127
-len(tokens)
-#11976
-len(content)
-#4616
-content_fraction(tokens)
-#0.385437541750167
-
 # Word Puzzle
 puzzle_letters = nltk.FreqDist('egivrvonl')
 obligatory = 'r'
