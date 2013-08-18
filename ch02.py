@@ -140,8 +140,7 @@ raw[:50]
 words = udhr.words('English-Latin1')
 words[:10]
 sents = udhr.sents('English-Latin1')
-sents[0]
-#[u'Universal', u'Declaration', u'of', u'Human', u'Rights', u'Preamble', u'Whereas' ...
+sents[0] #[u'Universal', u'Declaration', u'of', u'Human', u'Rights'...
 
 # Loading your own Corpus
 from nltk.corpus import PlaintextCorpusReader
@@ -152,24 +151,15 @@ wordlists.words('connectives')
 
 corpus_root = '/Users/gene/Backed/Documents'
 taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
-taow.fileids()
-#['artofwar.txt']
-taow.words()
-#['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
-len(taow.words())
-#13038
-len(taow.sents())
-#943
-len([s for s in taow.sents() if 'enemy' in s])
-#111
-len([s for s in taow.sents() if 'ally' in s])
-#2
-len([s for s in taow.sents() if 'allies' in s])
-#3
-len([s for s in taow.sents() if 'spy' in s])
-#8
-len([s for s in taow.sents() if 'spies' in s])
-#11
+taow.fileids() #['artofwar.txt']
+taow.words() #['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
+len(taow.words()) #13038
+len(taow.sents()) #943
+len([s for s in taow.sents() if 'enemy' in s]) #111
+len([s for s in taow.sents() if 'ally' in s]) #2
+len([s for s in taow.sents() if 'allies' in s]) #3
+len([s for s in taow.sents() if 'spy' in s]) #8
+len([s for s in taow.sents() if 'spies' in s]) #11
 
 # 2.2 Conditional Frequency Distributions
 from nltk.corpus import brown
@@ -190,12 +180,9 @@ cfd = nltk.ConditionalFreqDist(genre_word)
 cfd
 cfd.conditions()
 cfd[cats[0]]
-cfd[cats[1]]
-#<FreqDist with 3233 samples and 14470 outcomes>
-len(list(cfd[cats[1]]))
-#3233
-cfd[cats[1]]['could']
-#49
+cfd[cats[1]] #<FreqDist with 3233 samples and 14470 outcomes>
+len(list(cfd[cats[1]])) #3233
+cfd[cats[1]]['could'] #49
 
 # Plotting and Tabulating Distributions
 from nltk.corpus import udhr
@@ -246,23 +233,18 @@ f = 'carroll-alice.txt'
 w = nltk.corpus.gutenberg.words(f)
 b = nltk.bigrams(w)
 cfd = nltk.ConditionalFreqDist(b)
-cfd['rabbit']
-#<FreqDist with 3 samples and 5 outcomes>
-cfd['Rabbit']
-#<FreqDist with 30 samples and 45 outcomes>
-print cfd['Rabbit']
-#<FreqDist: ',': 8, "'": 4, 'blew': 2, 'came': 2, 'read': 2, 'say': 2, 'was': 2, '-': 1, '.': 1, ':': 1, ...>
+cfd['rabbit'] #<FreqDist with 3 samples and 5 outcomes>
+cfd['Rabbit'] #<FreqDist with 30 samples and 45 outcomes>
+print cfd['Rabbit'] #<FreqDist: ',': 8, "'": 4, 'blew': 2, 'came': 2...>
 generate_model(cfd, 'Rabbit')
 
 from nltk.corpus import PlaintextCorpusReader
 corpus_root = '/Users/gene/Backed/Documents'
 taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
 b = nltk.bigrams(taow.words())
-len(b)
-#13037
+len(b) #13037
 cfd = nltk.ConditionalFreqDist(b)
-generate_model(cfd, 'enemy')
-# enemy ' s own men , and the enemy ' s own men , and
+generate_model(cfd, 'enemy') # enemy ' s own men , and the enemy ' s own men , and
 
 # Functions
 f = open('/Users/gene/Backed/Documents/artofwar.txt')
@@ -285,18 +267,14 @@ def plural(word):
     else:
         return word + 's'
 
-plural('boy')
-#'boies'
-plural('fan')
-#'fen'
+plural('boy') #'boies'
+plural('fan') #'fen'
 
 # Modules
 # local import:
 from textproc import plural
-plural('boy')
-#'boies'
-plural('fan')
-#'fen'
+plural('boy') #'boies'
+plural('fan') #'fen'
 
 # Wordlist Corpora
 def unusual_words(text):
