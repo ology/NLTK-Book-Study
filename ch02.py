@@ -398,4 +398,23 @@ text = ['boing', 'boom', 'chuck']
 [ph for w in text for ph in prondict[w][0]]
 #['B', 'OY1', 'N', 'B', 'UW1', 'M', 'CH', 'AH1', 'K']
 
+# Comparative Wordlists
+from nltk.corpus import swadesh
+len(swadesh.words('en')) #207
+en2fr = swadesh.entries(['en', 'fr'])
+translate = dict(en2fr)
+translate['one'] #'un'
+translate['two'] #'deux'
+translate['three'] #'trois'
+
+en2es = swadesh.entries(['en', 'es'])
+translate.update(dict(en2es))
+translate['dog'] #'perro'
+translate.update(dict(en2fr))
+translate['dog'] #'chien'
+
+languages = ['en', 'de', 'nl', 'es', 'fr', 'pt', 'la']
+entry = range(139, 143)
+for i in entry:
+    print swadesh.entries(languages)[i]
 
