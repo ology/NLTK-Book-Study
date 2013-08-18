@@ -119,6 +119,7 @@ for file in udhr.fileids():
     for lang in languages:
         if lang in file:
             files.append(file)
+
 # List comprehension of same:
 [file for file in udhr.fileids() for lang in languages if lang in file]
 
@@ -130,6 +131,7 @@ def udhr_cond_freq_dist(udhr, languages):
         for lang in languages if lang in file
         for word in udhr.words(file))
     cfd.plot()
+
 udhr_cond_freq_dist(udhr, languages)
 
 # Parsing methods.
@@ -203,6 +205,7 @@ def udhr_cond_freq_dist(udhr, languages):
         for file in udhr.fileids()
         for lang in languages if lang in file
         for word in udhr.words(file))
+
 languages = [
     'English',
     'French',
@@ -269,6 +272,7 @@ def lexical_diversity(text):
     vocab_size = len(set(text))
     lexical_diversity = word_count / vocab_size
     return lexical_diversity
+
 lexical_diversity(raw)
 
 def plural(word):
@@ -320,4 +324,78 @@ wordlist = nltk.corpus.words.words()
 [w for w in wordlist if len(w) >= 6
                      and obligatory in w
                      and nltk.FreqDist(w) <= puzzle_letters]
+
+# Personal names.
+names = nltk.corpus.names
+names.fileids() #['female.txt', 'male.txt']
+male_names = names.words('male.txt')
+female_names = names.words('female.txt')
+androgenous = [w for w in male_names if w in female_names]
+len(androgenous) #365
+
+cfd = nltk.ConditionalFreqDist(
+    (fileid, name[-1])
+    for fileid in names.fileids()
+    for name in names.words(fileid)
+)
+cfd.plot()
+
+# Pronounciation database entries.
+# word x phonetic code list ("phones")
+# Where phone digits represent primary stress (1), secondary stress (2) & no
+# stress (0).
+entries = nltk.corpus.cmudict.entries()
+len(entries) #133737
+entries[133736] #('zywicki', ['Z', 'IH0', 'W', 'IH1', 'K', 'IY0'])
+i = 39943
+j = 9
+for entry in entries[ i : i + j ]:
+    print entry
+
+[e for e in entries if e[0] == 'gene'] # [('gene', ['JH', 'IY1', 'N'])]
+[e for e in entries if e[0].startswith('gene')] # [('gene', ['JH', 'IY1', 'N'])]
+
+syllable = ['N', 'IH0', 'K', 'S']
+[word for word, pron in entries if pron[-4:] == syllable]
+syllable = ['IY1', 'N']
+[word for word, pron in entries if pron[-2:] == syllable]
+
+# Show words that end with a "silent n."
+[w for w, pron in entries if pron[-1] == 'M' and w[-1] == 'n']
+# Show the sorted set of initial letters of words that sound like they start
+# with an 'N' but actually don't.
+sorted(set(w[:2] for w, pron in entries if pron[0] == 'N' and w[0] != 'n'))
+#['gn', 'kn', 'mn', 'pn']
+
+# Return the syllable stress list.
+def stress(pron):
+    return [char for phone in pron for char in phone if char.isdigit()]
+
+[w for w, pron in entries if stress(pron) == ['0', '1', '0', '2', '0']]
+[w for w, pron in entries if stress(pron) == ['0', '2', '0', '1', '0']]
+[w for w, pron in entries if stress(pron) == ['0', '0']]
+
+# Pronunciation dictionary.
+prondict = nltk.corpus.cmudict.dict()
+prondict['fire'] #[['F', 'AY1', 'ER0'], ['F', 'AY1', 'R']]
+
+prondict['foo'] #[['F', 'UW1']]
+prondict['foobar'] #[['F', 'UW1', 'B', 'AA1', 'R']]
+prondict['foobarbaz']
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 'foobarbaz'
+
+prondict['jazz'] # [['JH', 'AE1', 'Z']]
+prondict['foobarbaz'] = [['F', 'UW1', 'B', 'AA1', 'R', 'B', 'AE1', 'Z']]
+
+# Kraftwerk ftw.
+text = ['bowing', 'boom', 'chalk']
+[ph for w in text for ph in prondict[w][0]]
+#['B', 'OW1', 'IH0', 'NG', 'B', 'UW1', 'M', 'CH', 'AA1', 'K']
+prondict['boing'] = [['B', 'OY1', 'N']]
+text = ['boing', 'boom', 'chuck']
+[ph for w in text for ph in prondict[w][0]]
+#['B', 'OY1', 'N', 'B', 'UW1', 'M', 'CH', 'AH1', 'K']
+
 
