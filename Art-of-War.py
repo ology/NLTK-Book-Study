@@ -54,3 +54,33 @@ def content_fraction(text):
 content_fraction(tokens) #0.385437541750167
 content_fraction(content) #0.9166004765687054
 
+# WordNet.
+from nltk.corpus import wordnet as wn
+# Senses and Synonyms.
+words = ['enemy', 'opponent']
+syns = []#syn for syn in wn.synsets(w) for w in words] # XXX Not working?
+# But this does work.
+for w in words:
+    for syn in wn.synsets(w):
+        syns.append(syn)
+
+[syn.lemma_names for syn in syns]
+
+wn.synset(syn).lemma_names #['car', 'auto', 'automobile', 'machine', 'motorcar']
+wn.synset(syn).definition #'a motor vehicle with four wheels;...
+wn.synset(syn).examples #['he needs a car to get to work']
+wn.synset(syn).lemmas #[Lemma('car.n.01.car'), Lemma('car.n.01.auto'), ...
+wn.lemma(syn + '.automobile') #Lemma('car.n.01.automobile')
+wn.lemma(syn + '.automobile').synset #Synset('car.n.01')
+wn.lemma(syn + '.automobile').name #'automobile'
+wn.synsets('car') #[Synset('car.n.01'), Synset('car.n.02'),...
+for synset in wn.synsets('car'):
+    print synset.lemma_names
+
+#['car', 'auto', 'automobile', 'machine', 'motorcar']
+#['car', 'railcar', 'railway_car', 'railroad_car']
+#['car', 'gondola']
+#['car', 'elevator_car']
+#['cable_car', 'car']
+
+wn.lemmas('car') #[Lemma('car.n.01.car'), Lemma('car.n.02.car'),...

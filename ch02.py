@@ -384,15 +384,45 @@ translate = dict(en2fr)
 translate['one'] #'un'
 translate['two'] #'deux'
 translate['three'] #'trois'
-
+# Swap wordlists.
 en2es = swadesh.entries(['en', 'es'])
 translate.update(dict(en2es))
 translate['dog'] #'perro'
 translate.update(dict(en2fr))
 translate['dog'] #'chien'
 
+# Show common entries.
 languages = ['en', 'de', 'nl', 'es', 'fr', 'pt', 'la']
 entry = range(139, 143)
 for i in entry:
     print swadesh.entries(languages)[i]
+
+# Toolbox Lexicon
+# http://www.sil.org/computing/toolbox/
+from nltk.corpus import toolbox
+toolbox.entries('rotokas.dic') # TODO Build/find useful toolbox.dic files.
+
+# WordNet
+from nltk.corpus import wordnet as wn
+# Senses and Synonyms
+syn = 'car.n.01'
+wn.synsets('motorcar')
+wn.synset(syn).lemma_names #['car', 'auto', 'automobile', 'machine', 'motorcar']
+wn.synset(syn).definition #'a motor vehicle with four wheels;...
+wn.synset(syn).examples #['he needs a car to get to work']
+wn.synset(syn).lemmas #[Lemma('car.n.01.car'), Lemma('car.n.01.auto'), ...
+wn.lemma(syn + '.automobile') #Lemma('car.n.01.automobile')
+wn.lemma(syn + '.automobile').synset #Synset('car.n.01')
+wn.lemma(syn + '.automobile').name #'automobile'
+wn.synsets('car') #[Synset('car.n.01'), Synset('car.n.02'),...
+for synset in wn.synsets('car'):
+    print synset.lemma_names
+
+#['car', 'auto', 'automobile', 'machine', 'motorcar']
+#['car', 'railcar', 'railway_car', 'railroad_car']
+#['car', 'gondola']
+#['car', 'elevator_car']
+#['cable_car', 'car']
+
+wn.lemmas('car') #[Lemma('car.n.01.car'), Lemma('car.n.02.car'),...
 
