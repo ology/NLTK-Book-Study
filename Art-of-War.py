@@ -11,6 +11,26 @@ from __future__ import division
 from nltk.corpus import PlaintextCorpusReader
 from nltk.corpus import wordnet as wn
 
+# Subroutines used below.
+def generate_model(cfdist, word, num=15):
+    for i in range(num):
+        print word,
+        word = cfdist[word].max() # XXX max() renders loops
+
+def lexical_diversity(text):
+    word_count = len(text)
+    vocab_size = len(set(text))
+    lexical_diversity = word_count / vocab_size
+    return lexical_diversity
+
+def content_fraction(text, stop):
+    content = [w for w in text if w.isalpha() and w.lower() not in stop]
+    return len(content) / len(text)
+
+# Grab stopwords.
+stopwords = nltk.corpus.stopwords.words('english')
+len(stopwords) #127
+
 # PlaintextCorpusReader input.
 corpus_root = '/Users/gene/Backed/Documents'
 taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
@@ -29,17 +49,9 @@ b = nltk.bigrams(taow.words())
 len(b) #13037
 cfd = nltk.ConditionalFreqDist(b)
 
-def generate_model(cfdist, word, num=15):
-    for i in range(num):
-        print word,
-        word = cfdist[word].max() # XXX max() renders loops
-
 generate_model(cfd, 'enemy') # enemy ' s own men , and the enemy ' s own men , and
 
-# Grab stopwords.
-stopwords = nltk.corpus.stopwords.words('english')
-len(stopwords) #127
-
+#------------------------------------------------------------------------------#
 # WordNet.
 # Senses and Synonyms.
 words = ['enemy', 'opponent']
@@ -62,12 +74,6 @@ for syn in syns:
 unique_names = set(names)
 
 #------------------------------------------------------------------------------#
-def lexical_diversity(text):
-    word_count = len(text)
-    vocab_size = len(set(text))
-    lexical_diversity = word_count / vocab_size
-    return lexical_diversity
-
 # Raw read.
 f = open('/Users/gene/Backed/Documents/artofwar.txt')
 raw = f.read()
@@ -84,10 +90,6 @@ lexical_diversity(tokens) #4.509036144578313
 # Compute restricted mentrics.
 content = [w for w in tokens if w.isalpha() and w.lower() not in stopwords]
 len(content) #4616
-
-def content_fraction(text, stop):
-    content = [w for w in text if w.isalpha() and w.lower() not in stop]
-    return len(content) / len(text)
 
 content_fraction(tokens, stopwords) #0.385437541750167
 content_fraction(content, stopwords) #1.0
