@@ -2,53 +2,42 @@
 # -- coding: utf-8 -- 
 
 # -----------------------------------------------------------------------------#
-# Art of War analysis based on http://nltk.org/book/
+# Art of War analysis based on http://nltk.org/book/ concepts.
 # -- gene + github at ology dot net not dot com
 # -----------------------------------------------------------------------------#
 
-import nltk
+# Import functionality.
 from __future__ import division
+import nltk
 from nltk.corpus import PlaintextCorpusReader
 from nltk.corpus import wordnet as wn
-
-# Subroutines used below.
-def generate_model(cfdist, word, num=15):
-    for i in range(num):
-        print word,
-        word = cfdist[word].max() # XXX max() renders loops
-
-def lexical_diversity(text):
-    word_count = len(text)
-    vocab_size = len(set(text))
-    lexical_diversity = word_count / vocab_size
-    return lexical_diversity
-
-def content_fraction(text, stop):
-    content = [w for w in text if w.isalpha() and w.lower() not in stop]
-    return len(content) / len(text)
 
 # Grab stopwords.
 stopwords = nltk.corpus.stopwords.words('english')
 len(stopwords) #127
 
-# PlaintextCorpusReader input.
-corpus_root = '/Users/gene/Backed/Documents'
-taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
+# Read the plain text.
+corpus_root = 'corpora'
+aow = PlaintextCorpusReader(corpus_root, 'Art-of-War.txt')
 
-taow.fileids() #['artofwar.txt']
-taow.words() #['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
-len(taow.words()) #13038
-len(taow.sents()) #943
-len([s for s in taow.sents() if 'enemy' in s]) #111
-len([s for s in taow.sents() if 'ally' in s]) #2
-len([s for s in taow.sents() if 'allies' in s]) #3
-len([s for s in taow.sents() if 'spy' in s]) #8
-len([s for s in taow.sents() if 'spies' in s]) #11
+aow.fileids() #['artofwar.txt']
+aow.words() #['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
+len(aow.words()) #13038
+len(aow.sents()) #943
+len(aow.paras()) #399
+len([s for s in aow.sents() if 'enemy' in s]) #111
+len([s for s in aow.sents() if 'enemies' in s]) #1
+# TODO for s in ... for w in aow.words if w.startswith('enem')]
+len([s for s in aow.sents() if 'ally' in s]) #2
+len([s for s in aow.sents() if 'allies' in s]) #3
+len([s for s in aow.sents() if 'spy' in s]) #8
+len([s for s in aow.sents() if 'spies' in s]) #11
 
-b = nltk.bigrams(taow.words())
+# Analysis.
+b = nltk.bigrams(aow.words())
 len(b) #13037
 cfd = nltk.ConditionalFreqDist(b)
-
+# TODO Why?
 generate_model(cfd, 'enemy') # enemy ' s own men , and the enemy ' s own men , and
 
 #------------------------------------------------------------------------------#
@@ -93,3 +82,20 @@ len(content) #4616
 
 content_fraction(tokens, stopwords) #0.385437541750167
 content_fraction(content, stopwords) #1.0
+
+# Subroutines.
+def generate_model(cfdist, word, num=15):
+    for i in range(num):
+        print word,
+        word = cfdist[word].max() # XXX max() renders loops
+
+def lexical_diversity(text):
+    word_count = len(text)
+    vocab_size = len(set(text))
+    lexical_diversity = word_count / vocab_size
+    return lexical_diversity
+
+def content_fraction(text, stop):
+    content = [w for w in text if w.isalpha() and w.lower() not in stop]
+    return len(content) / len(text)
+
