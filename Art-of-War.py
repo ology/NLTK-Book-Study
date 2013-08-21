@@ -27,11 +27,19 @@ len(aow.sents()) #943
 len(aow.paras()) #399
 len([s for s in aow.sents() if 'enemy' in s]) #111
 len([s for s in aow.sents() if 'enemies' in s]) #1
-# TODO for s in ... for w in aow.words if w.startswith('enem')]
 len([s for s in aow.sents() if 'ally' in s]) #2
 len([s for s in aow.sents() if 'allies' in s]) #3
 len([s for s in aow.sents() if 'spy' in s]) #8
 len([s for s in aow.sents() if 'spies' in s]) #11
+
+# Extract the list of sentences with /^enem(?:y|ies)$/i words.
+enemy_sents = []
+for s in aow.sents():
+    for w in s:
+        if w.lower().startswith('enem'):
+            enemy_sents.append(s) # TODO Skip if seen.
+
+len(enemy_sents) #126
 
 # Analysis.
 b = nltk.bigrams(aow.words())
