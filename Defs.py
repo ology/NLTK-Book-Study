@@ -32,3 +32,31 @@ def avg_word_len(text):
     t = sum([len(w) for w in v])
     return t / len(v)
 
+def unusual_words(text):
+    text_vocab = set(w.lower() for w in text if w.isalpha())
+    english_vocab = set(w.lower() for w in nltk.corpus.words.words())
+    unusual = text_vocab.difference(english_vocab)
+    return sorted(unusual)
+
+def cond_freq_dist(text, target1, target2):
+    cfd = nltk.ConditionalFreqDist(
+        (target, fileid[:4])                # word-target, address-year
+        for fileid in text.fileids()        # inagural address
+        for w in text.words(fileid)         # all words in the address
+        for target in [target1, target2]    # for each word
+        if w.lower().startswith(target))    # ...that is lower, etc.
+    cfd.plot()
+
+# ConditionalFreqDist for words in the given languages.
+def udhr_cond_freq_dist(udhr, languages):
+    cfd = nltk.ConditionalFreqDist(
+        (lang, len(word))
+        for file in udhr.fileids()
+        for lang in languages if lang in file
+        for word in udhr.words(file))
+    cfd.plot()
+
+# Return the syllable stress list.
+def stress(pron):
+    return [char for phone in pron for char in phone if char.isdigit()]
+
