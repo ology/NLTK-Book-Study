@@ -389,7 +389,8 @@ for i in entry:
 # Toolbox Lexicon
 # http://www.sil.org/computing/toolbox/
 from nltk.corpus import toolbox
-toolbox.entries('rotokas.dic') # TODO Build/find useful toolbox.dic files.
+toolbox.entries('rotokas.dic')
+# TODO Find/build useful toolbox.dic files.
 
 # WordNet
 from nltk.corpus import wordnet as wn
@@ -416,22 +417,25 @@ for synset in wn.synsets('car'):
 
 wn.lemmas('car') #[Lemma('car.n.01.car'), Lemma('car.n.02.car'),...
 
-# The WordNet Hierarchy.
+# The WordNet Hierarchy
+#
+# Hypernyms and hyponyms are lexical relations that relate synsets. These
+# relations navigate up and down the "is-a" path hierarchy.
+# Hyponym: conceptually "more specific"
+# Hypernym: conceptually "more general"
+# Hypernym paths lead to more general terms.
 cars = wn.synset('car.n.01')
-# hyponym: conceptually "more specific"
 car_types = cars.hyponyms()
 car_types[26] #Synset('ambulance.n.01')
 sorted([lemma.name for synset in car_types for lemma in synset.lemmas])
 #['Model_T', 'S.U.V.', 'SUV'...'used-car', 'waggon', 'wagon']
-# hypernym: conceptually "more general"
 cars.hypernyms()
 paths = cars.hypernym_paths()
 len(paths) #2
+# wheeled_vehicle.n.01 is classed as both vehicle & container.
 [synset.name for synset in paths[0]]
 [synset.name for synset in paths[1]]
 cars.root_hypernyms()
-# Hypernyms and hyponyms are called lexical relations because they relate one
-# synset to another. These relations navigate up and down the "is-a" hierarchy.
 
 # Brose WN.
 nltk.app.wordnet() # W00! Very cool!
@@ -447,7 +451,7 @@ wn.synset('tree.n.01').member_holonyms()
 for synset in wn.synsets('mint', wn.NOUN):
     print synset.name + ':', synset.definition
 
-# The leaves are a part of the pant.
+# The leaves are a part of the plant.
 wn.synset('mint.n.04').part_holonyms() #[Synset('mint.n.02')]
 # A derived candy from the plant.
 wn.synset('mint.n.04').substance_holonyms() #[Synset('mint.n.05')]
@@ -467,4 +471,71 @@ wn.lemma('horizontal.a.01.horizontal').antonyms()
 #[Lemma('vertical.a.01.vertical'), Lemma('inclined.a.02.inclined')]
 wn.lemma('staccato.r.01.staccato').antonyms()
 #[Lemma('legato.r.01.legato')]
+
+# Methods defined on a synset.
+dir(wn.synset('harmony.n.02'))
+# ['__class__', '__delattr__' ... 'verb_groups', 'wup_similarity']
+help(wn) # Also handy.
+
+# Semantic Similarity.
+right = wn.synset('right_whale.n.01')
+things = ['orca', 'minke_whale', 'tortoise', 'novel']
+i = 0
+# Show common conceptual ancestors and respective metrics.
+for thing in things:
+    i += 1
+    syns = wn.synset(thing + '.n.01')
+    print '%d path. %s %s = %.4f similarity' % (i, right, syns, right.path_similarity(syns))
+    for hyp in right.lowest_common_hypernyms(syns):
+        min = hyp.min_depth()
+        print '\t%s = %d synset depth' % (hyp, min)
+
+# Verbs!
+from nltk.corpus import verbnet as vn
+vn
+<VerbnetCorpusReader in '.../corpora/verbnet' (not loaded yet)>
+# XXX Can't make this work, even after reading the source (with no docs).
+
+# 2.8 Exercises
+# 2.
+austen = nltk.corpus.gutenberg.words('austen-sense.txt')
+len(austen) #141576
+len(set(austen)) #6833
+
+# 4.
+from nltk.corpus import state_union
+state_union.fileids()
+def cond_freq_dist(text, targets):
+    cfd = nltk.ConditionalFreqDist(
+        (target, fileid[:4])             # word target, file name year
+        for fileid in text.fileids()     # text file name
+        for w in text.words(fileid)      # all words in the address
+        for target in targets            # all targets
+        if w.lower().startswith(target)) # ...that is lower, etc.
+    cfd.plot()
+
+targets = ['people','man','woman']
+cond_freq_dist(state_union, targets)
+targets = ['terror','freedom','secur','priv']
+cond_freq_dist(state_union, targets)
+
+# 5.
+from nltk.corpus import wordnet as wn
+# Meronyms: Parts, kinds of
+#{member,part,substance}_meronyms()
+# Holonyms: Groups of
+#{member,part,substance}_holonyms()
+concept = 'think'
+for synset in wn.synsets(concept, wn.VERB):
+    print synset.name + ':', synset.definition
+
+syn = 'shopfront.n.01'
+wn.synset(syn).member_meronyms()
+wn.synset(syn).part_meronyms()
+wn.synset(syn).substance_meronyms()
+wn.synset(syn).member_holonyms()
+wn.synset(syn).part_holonyms()
+wn.synset(syn).substance_holonyms()
+
+# 6.
 
