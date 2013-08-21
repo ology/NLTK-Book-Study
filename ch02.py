@@ -149,18 +149,6 @@ wordlists = PlaintextCorpusReader(corpus_root, '.*')
 wordlists.fileids()
 wordlists.words('connectives')
 
-corpus_root = '/Users/gene/Backed/Documents'
-taow = PlaintextCorpusReader(corpus_root, 'artofwar.txt')
-taow.fileids() #['artofwar.txt']
-taow.words() #['THE', 'ART', 'OF', 'WAR', 'BY', 'SUN', 'TZU', ...]
-len(taow.words()) #13038
-len(taow.sents()) #943
-len([s for s in taow.sents() if 'enemy' in s]) #111
-len([s for s in taow.sents() if 'ally' in s]) #2
-len([s for s in taow.sents() if 'allies' in s]) #3
-len([s for s in taow.sents() if 'spy' in s]) #8
-len([s for s in taow.sents() if 'spies' in s]) #11
-
 # 2.2 Conditional Frequency Distributions
 from nltk.corpus import brown
 cats = ['religion', 'science_fiction']
@@ -257,6 +245,7 @@ def lexical_diversity(text):
 
 lexical_diversity(raw)
 
+# XXX Lame:
 def plural(word):
     if word.endswith('y'):
         return word[:-1] + 'ies'
@@ -404,7 +393,8 @@ toolbox.entries('rotokas.dic') # TODO Build/find useful toolbox.dic files.
 
 # WordNet
 from nltk.corpus import wordnet as wn
-# Senses and Synonyms
+# synset, synsets: synonym set
+# lemma: collection of synonymous words
 syn = 'car.n.01'
 wn.synsets('motorcar')
 wn.synset(syn).lemma_names #['car', 'auto', 'automobile', 'machine', 'motorcar']
@@ -425,4 +415,56 @@ for synset in wn.synsets('car'):
 #['cable_car', 'car']
 
 wn.lemmas('car') #[Lemma('car.n.01.car'), Lemma('car.n.02.car'),...
+
+# The WordNet Hierarchy.
+cars = wn.synset('car.n.01')
+# hyponym: conceptually "more specific"
+car_types = cars.hyponyms()
+car_types[26] #Synset('ambulance.n.01')
+sorted([lemma.name for synset in car_types for lemma in synset.lemmas])
+#['Model_T', 'S.U.V.', 'SUV'...'used-car', 'waggon', 'wagon']
+# hypernym: conceptually "more general"
+cars.hypernyms()
+paths = cars.hypernym_paths()
+len(paths) #2
+[synset.name for synset in paths[0]]
+[synset.name for synset in paths[1]]
+cars.root_hypernyms()
+# Hypernyms and hyponyms are called lexical relations because they relate one
+# synset to another. These relations navigate up and down the "is-a" hierarchy.
+
+# Brose WN.
+nltk.app.wordnet() # W00! Very cool!
+
+# More Lexical Relations
+# meronyms: Parts, kinds of
+wn.synset('tree.n.01').part_meronyms()
+wn.synset('tree.n.01').substance_meronyms()
+# holonyms: Groups of
+wn.synset('tree.n.01').member_holonyms()
+
+# Inspect the relations of the word "mint."
+for synset in wn.synsets('mint', wn.NOUN):
+    print synset.name + ':', synset.definition
+
+# The leaves are a part of the pant.
+wn.synset('mint.n.04').part_holonyms() #[Synset('mint.n.02')]
+# A derived candy from the plant.
+wn.synset('mint.n.04').substance_holonyms() #[Synset('mint.n.05')]
+
+# Verb entailments.
+wn.synset('walk.v.01').entailments() #[Synset('step.v.01')]
+wn.synset('eat.v.01').entailments()
+#[Synset('swallow.v.01'), Synset('chew.v.01')]
+wn.synset('tease.v.03').entailments()
+#[Synset('arouse.v.07'), Synset('disappoint.v.01')]
+# Lemma relations.
+wn.lemma('supply.n.02.supply').antonyms()
+#[Lemma('demand.n.02.demand')]
+wn.lemma('rush.v.01.rush').antonyms()
+#[Lemma('linger.v.04.linger')]
+wn.lemma('horizontal.a.01.horizontal').antonyms()
+#[Lemma('vertical.a.01.vertical'), Lemma('inclined.a.02.inclined')]
+wn.lemma('staccato.r.01.staccato').antonyms()
+#[Lemma('legato.r.01.legato')]
 
