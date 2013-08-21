@@ -42,10 +42,11 @@ for s in aow.sents():
 len(enemy_sents) #126 XXX Can contain duplicates. Fix TODO above.
 
 # Analysis.
-words = ['ally','allies','spy','spies','enemy','enemies','foe','opponent']
 aow_text = nltk.Text(aow.words())
 aow_text
 #<Text: THE ART OF WAR BY SUN TZU Translated...>
+words = ['ally','allies','spy','spies','enemy','enemies','foe','opponent']
+words = ['attack','attacking','defend','definding','defense','wait']
 aow_text.dispersion_plot(words)
 
 b = nltk.bigrams(aow.words())
@@ -113,4 +114,12 @@ def lexical_diversity(text):
 def content_fraction(text, stop):
     content = [w for w in text if w.isalpha() and w.lower() not in stop]
     return len(content) / len(text)
+
+def token_percent(token, text):
+    return 100 * text.count(token) / len(text)
+
+def avg_word_len(text):
+    v = set([w.lower() for w in text if w.isalpha()])
+    t = sum([len(w) for w in v])
+    return t / len(v)
 
