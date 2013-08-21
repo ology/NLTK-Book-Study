@@ -39,12 +39,19 @@ for s in aow.sents():
         if w.lower().startswith('enem'):
             enemy_sents.append(s) # TODO Skip if seen.
 
-len(enemy_sents) #126
+len(enemy_sents) #126 XXX Can contain duplicates. Fix TODO above.
 
 # Analysis.
+words = ['ally','allies','spy','spies','enemy','enemies','foe','opponent']
+aow_text = nltk.Text(aow.words())
+aow_text
+#<Text: THE ART OF WAR BY SUN TZU Translated...>
+aow_text.dispersion_plot(words)
+
 b = nltk.bigrams(aow.words())
 len(b) #13037
 cfd = nltk.ConditionalFreqDist(b)
+
 # TODO Why?
 generate_model(cfd, 'enemy') # enemy ' s own men , and the enemy ' s own men , and
 
