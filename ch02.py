@@ -46,6 +46,7 @@ whords = ['what', 'when', 'where', 'who', 'why']
 
 scifi = brown.words(categories=genres[3])
 #scifi = brown.words(fileids=['cm01'])
+#religion = brown.words(categories=genres[1])
 #religion_scifi = brown.words(categories=[genres[1], genres[3]])
 fdist = nltk.FreqDist([w.lower() for w in scifi])
 for m in modals:
@@ -537,5 +538,74 @@ wn.synset(syn).member_holonyms()
 wn.synset(syn).part_holonyms()
 wn.synset(syn).substance_holonyms()
 
-# 6.
+# 7.
+text = nltk.Text(state_union.words())
+text.concordance('however') # . However , = 25. , however , = 67.
 
+# 8. Already done above
+# 9. Words in common (but with different usage-meaning)
+nltk.corpus.gutenberg.fileids() # What are the file names again?
+austen = nltk.corpus.gutenberg.words('austen-sense.txt')
+austen_vocab = set([w.lower() for w in austen if w.isalpha()])
+moby = nltk.corpus.gutenberg.words('melville-moby_dick.txt')
+moby_vocab = set([w.lower() for w in moby if w.isalpha()])
+shared_vocab = [a for a in austen_vocab for m in moby_vocab if a == m]
+len(shared_vocab) #4354
+# TODO Use WN to puzzle-out "different usage-meaning?"
+
+# 10. "word types?" As in ...stemming?  XXX This was never discussed.
+# # Hyponym: conceptually "more specific" ^ Maybe
+# 11. Already done above
+# 12.
+prondict = nltk.corpus.cmudict.dict()
+len(prondict) #123455
+len(set(prondict)) #123455 - All distinct.
+alphas = [w for w in prondict if w.isalpha()]
+len(alphas) #115533
+multi_pron = [w for w in alphas if len(prondict[w]) > 1]
+len(multi_pron) #8492
+8492 / 115533 #7.4% of words have muliple pronunciations.
+
+# 13. Noun synsets without hyponyms.
+from nltk.corpus import wordnet as wn
+for s in wn.all_synsets('n'):
+    if len(s.hyponyms()) == 0:
+        print s
+
+# 14. Show word: defn & any {hyper,hypo}nyms with defns.
+def supergloss(s):
+    print "%s: %s" % (wn.synset(syn).lemma_names[0], s.definition)
+    if len(s.hypernyms()) > 0:
+        print "Hypernyms:"
+        for hyp in s.hypernyms():
+            print "\t%s: %s" % (hyp.lemma_names[0], hyp.definition)
+        print "Hyponyms:"
+        for hyp in s.hyponyms():
+            print "\t%s: %s" % (hyp.lemma_names[0], hyp.definition)
+
+syn = 'car.n.01'
+supergloss(wn.synset(syn))
+
+# 15. All words that occur at least X times in document Y.
+from nltk.corpus import brown
+adventure = brown.words(categories=brown.categories()[0])
+scifi = brown.words(categories=brown.categories()[-1])
+len(scifi) #14470
+len([w.lower() for w in scifi if w.isalpha()]) #11762
+len(set([w.lower() for w in scifi if w.isalpha()])) #2870
+# Return a list of pair-lists for "normalized" word occurances.
+def occurance(n, text):
+    fdist = nltk.FreqDist([w.lower() for w in text if w.isalpha()])
+    occurance = []
+    i = 0
+    for word in fdist.keys():
+        if fdist[word] >= n:
+            occurance.append([word, fdist[word]])
+            i = i + 1
+            print '%d. %s: %d' % (i, word, fdist[word])
+    return occurance
+
+at_least = occurance(700, scifi) #1. the: 723
+at_least = occurance(300, scifi) #1. the: 723 2. of: 329 3. to: 306
+
+# 16. 
