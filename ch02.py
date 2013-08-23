@@ -597,7 +597,7 @@ def occurance(n, text):
     for word in fdist.keys():
         if fdist[word] >= n:
             occurance.append([word, fdist[word]])
-            i = i + 1
+            i += 1
             print '%d. %s: %d' % (i, word, fdist[word])
     return occurance
 
@@ -651,5 +651,36 @@ cfd = nltk.ConditionalFreqDist(
 )
 cfd.tabulate(conditions=cats, samples=subj_prons)
 cfd.tabulate(conditions=cats, samples=obj_prons)
-# Fascinating!
+# ^ Fascinating!
+
+# 20. compute the freq of the word in the brown genre.
+def brown_word_freq(word, genre):
+    fd = nltk.FreqDist([w.lower() for w in brown.words(categories=genre) if w.isalpha()])
+    print fd[word]
+
+brown_word_freq('he', 'religion')
+brown_word_freq('she', 'religion')
+# ^ This shows the same as the religion row of pronoun table, in 19 above.
+
+# 21. guess the number of syllables contained in a text
+from nltk.corpus import cmudict
+dict  = cmudict.dict()
+words = cmudict.words()
+def syllable_guess(text, dict, words):
+    syllables = 0
+    for token in text:
+        if token.isalpha() and token.lower() in words:
+            #print len(dict[token.lower()][0])
+            syllables += len(dict[token.lower()][0])
+    print '\t', syllables
+
+syllable_guess(adventure, dict, words) #1443
+# ^ That takes almost forever. :\
+from time import time
+start_time = time();
+syllable_guess(adventure, dict, words);
+print time() - start_time, "seconds"
+#101.207468033 seconds 
+syllable_guess(scifi, dict, words) #42177
+#
 
