@@ -153,10 +153,6 @@ wordlists.words('connectives')
 # 2.2 Conditional Frequency Distributions
 from nltk.corpus import brown
 cats = ['religion', 'science_fiction']
-#cfd = nltk.ConditionalFreqDist(
-#    (genre, word)
-#    for genre in cats
-#    for word in brown.words(categories=genre))
 genre_word = [
     (genre, word)
     for genre in cats
@@ -608,4 +604,39 @@ def occurance(n, text):
 at_least = occurance(700, scifi) #1. the: 723
 at_least = occurance(300, scifi) #1. the: 723 2. of: 329 3. to: 306
 
-# 16. 
+# 16. Categorical lexical diversity.
+#print 'Genre, Tokens, Types, Lexical diversity'
+for genre in brown.categories():
+    w = brown.words(categories=genre)
+    x = len(w)
+    y = len(set(w))
+    print '%s, %d, %d, %f' % (genre, x, y, (x / y))
+
+# 17. most frequently occurring words of a text that are not stopwords
+from nltk.corpus import stopwords
+stopwords = nltk.corpus.stopwords.words('english')
+def freq_occuring_words(n, text, stop):
+    content = [w.lower() for w in text if w.isalpha() and w.lower() not in stopwords]
+    fd = nltk.FreqDist(content)
+    print fd.keys()[:n + 1]
+
+freq_occuring(50, adventure, stopwords)
+
+# 18. print the 50 most frequent non-stopword bigrams
+def freq_occuring_bigrams(n, words, stop):
+    bigrams = nltk.bigrams(words)
+    cfd = nltk.FreqDist(
+        (w1, w2)
+        for (w1, w2) in bigrams
+            if w1.isalpha() and w1 not in stop
+           and w2.isalpha() and w2 not in stop
+    )
+    print cfd.keys()[:n + 1]
+
+freq_occuring_bigrams(20, adventure, stopwords)
+freq_occuring_bigrams(20, scifi, stopwords)
+freq_occuring_bigrams(20, scifi + adventure, stopwords)
+
+# 19. create a table of word frequencies by genre. find words whose presence (or
+# absence) is typical of a genre.
+
