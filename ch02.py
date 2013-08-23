@@ -684,7 +684,7 @@ start_time = time();
 ...; syllable_guess(scifi, dict, words); ... #42177
 # 21.222469807 seconds
 
-# 22. 'like' between every third word
+# 22. String M between every Nth word in a text.
 def hedge(text, string='F00', n=3):
     hedge = []
     i = 0
@@ -699,4 +699,33 @@ h = hedge(scifi)
 h[:20]
 h = hedge(scifi, 'like') # Ha
 h = hedge(scifi, 'like', 4) # Haha
+
+# 23. Zipf's Law "frequency of a word type is inversely proportional to its
+# rank."  Example: the 50th most common word should occur three times as
+# frequently as the 150th most common word.
+def zipf(text):
+    fd = nltk.FreqDist([w.lower() for w in text if w.isalpha()])
+    return fd
+
+z = zipf(scifi)
+z.B() #2870
+z.N() #11762
+z.max() #'the'
+z['the'] #723
+z.Nr(723) #1 word occurs 723 times
+z.Nr(10) #14 words occur 10 times each
+z.freq('the') #0.061469137901717395
+z.keys()[:10] #['the', 'of', 'to', 'and', 'a', 'was', 'he', 'in', 'it', 'had']
+z.samples()[:10] #['the', 'of', 'to', 'and', 'a', 'was', 'he', 'in', 'it', 'had']
+z.values()[:10] #[723, 329, 306, 294, 236, 200, 191, 164, 158, 143]
+z.items()[:5] #[('the', 723), ('of', 329), ('to', 306), ('and', 294), ('a', 236)]
+z.hapaxes()[:5] #['ab', 'abc', 'abdomen', 'abdominal', 'absentmindedly']
+
+nonhap = [w for w in z.samples() if w not in z.hapaxes()] #len()==1095
+x = 400 #len(nonhap)
+y = z.values()[:x] #[z.freq(w) for w in nonhap] # <- Idntical
+import matplotlib.pyplot as plt
+plt.plot(range(x), y[:x])
+#[<matplotlib.lines.Line2D object at 0x107fa3390>]
+plt.show()
 
