@@ -672,15 +672,31 @@ def syllable_guess(text, dict, words):
         if token.isalpha() and token.lower() in words:
             #print len(dict[token.lower()][0])
             syllables += len(dict[token.lower()][0])
-    print '\t', syllables
+    print 'Syllables: ', syllables
 
 syllable_guess(adventure, dict, words) #1443
 # ^ That takes almost forever. :\
 from time import time
 start_time = time();
-syllable_guess(adventure, dict, words);
-print time() - start_time, "seconds"
-#101.207468033 seconds 
-syllable_guess(scifi, dict, words) #42177
-#
+    syllable_guess(adventure, dict, words);
+    print time() - start_time, "seconds"
+#101.207468033 seconds - yep
+...; syllable_guess(scifi, dict, words); ... #42177
+# 21.222469807 seconds
+
+# 22. 'like' between every third word
+def hedge(text, string='F00', n=3):
+    hedge = []
+    i = 0
+    for word in text:
+        if i != 0 and not i % n:
+            hedge.append(string)
+        i += 1
+        hedge.append(word)
+    return hedge
+
+h = hedge(scifi)
+h[:20]
+h = hedge(scifi, 'like') # Ha
+h = hedge(scifi, 'like', 4) # Haha
 
