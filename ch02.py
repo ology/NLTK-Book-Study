@@ -639,4 +639,17 @@ freq_occuring_bigrams(20, scifi + adventure, stopwords)
 
 # 19. create a table of word frequencies by genre. find words whose presence (or
 # absence) is typical of a genre.
+cats = brown.categories()
+subj_prons = ['i',  'he',  'she', 'it', 'they', 'we', 'you']
+obj_prons  = ['me', 'him', 'her', 'it', 'them', 'us', 'you']
+# XXX 'it' and 'you' are ambiguous without grammatical analysis.
+cfd = nltk.ConditionalFreqDist(
+    (genre, word.lower())
+    for genre in cats
+    for word in brown.words(categories=genre)
+        if word.isalpha()
+)
+cfd.tabulate(conditions=cats, samples=subj_prons)
+cfd.tabulate(conditions=cats, samples=obj_prons)
+# Fascinating!
 
