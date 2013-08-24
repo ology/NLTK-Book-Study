@@ -752,23 +752,29 @@ plt.plot(range(x), y)
 plt.show()
 # Conclusion: Graph is jagged but sort-of imitates the smooth 23.1 graph.
 
-# 24. Modify the text generation program:
-# 24.1. Randomly choose from the n most likely words.
-def generate_model(file, toke_num=5, likely=5):
-    words   = nltk.corpus.gutenberg.words(file)
-    bigrams = nltk.bigrams([w for w in words if len(w) > 1 and w.isalpha()])
-    cfdist  = nltk.ConditionalFreqDist(bigrams)
-    for w in words: #random.choice(words[:likely]):
-        for i in range(toke_num):
+# 24. Modify the text generation program to:
+# 24.1. Generate a set of quasi-random phrases from the top N most likely words.
+def generate_model(text, top=10, tokens=5, sentences=10):
+    # Only consider the words ("alpha tokens") of more than one letter.
+    words = [w for w in text if len(w) > 1 and w.isalpha()]
+    # Compute a conditional frequency distribution of adjacent word pairs.
+    cfdist = nltk.ConditionalFreqDist(nltk.bigrams(words))
+    # Generate a phrase for each of the top words.
+    for w in words[:top]:
+        # Produce a phrase.
+        for i in range(tokens):
             print w,
-            w = random.choice(cfdist[w])
+            # For the next word, choose one of the adjacent words.
+            w = random.choice(list(cfdist[w]))
+        # Output a newline at the end of a phrase.
+        print
 
-f = 'english-kjv.txt'
-generate_model(f)
-generate_model(f, 10, 10)
-f = 'carroll-alice.txt'
-generate_model(f)
-generate_model(f, 10, 10)
+words = nltk.corpus.gutenberg.words('carroll-alice.txt')
+generate_model(words)
+generate_model(words, 10, 10)
+words = nltk.corpus.genesis.words('english-kjv.txt')
+generate_model(words)
+generate_model(words, 10, 10)
 
 # 24.2. Train the model on a corpus
 # 24.3. Train the model on a hybrid corpus
