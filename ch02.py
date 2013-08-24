@@ -721,11 +721,34 @@ z.values()[:10] #[723, 329, 306, 294, 236, 200, 191, 164, 158, 143]
 z.items()[:5] #[('the', 723), ('of', 329), ('to', 306), ('and', 294), ('a', 236)]
 z.hapaxes()[:5] #['ab', 'abc', 'abdomen', 'abdominal', 'absentmindedly']
 
+# 23.1.
+import matplotlib.pyplot as plt
 nonhap = [w for w in z.samples() if w not in z.hapaxes()] #len()==1095
 x = 400 #len(nonhap)
-y = z.values()[:x] #[z.freq(w) for w in nonhap] # <- Idntical
-import matplotlib.pyplot as plt
-plt.plot(range(x), y[:x])
+y = z.values()[:x] #[z.freq(w) for w in nonhap] # <- Identical
+plt.plot(range(x), y)
 #[<matplotlib.lines.Line2D object at 0x107fa3390>]
 plt.show()
+
+# 23.2. Tokenize a string of random words & plot as before.
+import random
+from nltk.tokenize import word_tokenize
+max = 0
+for w in nonhap:
+    max += len(w)
+
+max += len(nonhap)
+string = ''
+for i in range(max):
+    for char in random.choice('abcdefg '):
+        string += char
+
+len(string) #7439
+tokens = word_tokenize(string)
+z = zipf(tokens)
+x = len(set(tokens))
+y = z.values()[:x] #[z.freq(w) for w in nonhap] # <- Identical
+plt.plot(range(x), y)
+plt.show()
+# Conclusion: Graph is jagged but sort-of imitates the smooth 23.1 graph.
 
