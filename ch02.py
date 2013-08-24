@@ -203,7 +203,7 @@ cfd.plot(samples=days)
 
 # Generating Bigram Text
 f = 'english-kjv.txt'
-w = nltk.corpus.genesis.words(f)
+w = nltk.corpus.gutenberg.words(f)
 b = nltk.bigrams(w)
 cfd = nltk.ConditionalFreqDist(b)
 
@@ -752,8 +752,24 @@ plt.plot(range(x), y)
 plt.show()
 # Conclusion: Graph is jagged but sort-of imitates the smooth 23.1 graph.
 
-# 24. Modify the text generation program to:
+# 24. Modify the text generation program:
 # 24.1. Randomly choose from the n most likely words.
+def generate_model(file, toke_num=5, likely=5):
+    words   = nltk.corpus.gutenberg.words(file)
+    bigrams = nltk.bigrams([w for w in words if len(w) > 1 and w.isalpha()])
+    cfdist  = nltk.ConditionalFreqDist(bigrams)
+    for w in words: #random.choice(words[:likely]):
+        for i in range(toke_num):
+            print w,
+            w = random.choice(cfdist[w])
+
+f = 'english-kjv.txt'
+generate_model(f)
+generate_model(f, 10, 10)
+f = 'carroll-alice.txt'
+generate_model(f)
+generate_model(f, 10, 10)
+
 # 24.2. Train the model on a corpus
 # 24.3. Train the model on a hybrid corpus
 
