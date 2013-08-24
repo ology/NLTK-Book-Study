@@ -752,3 +752,16 @@ plt.plot(range(x), y)
 plt.show()
 # Conclusion: Graph is jagged but sort-of imitates the smooth 23.1 graph.
 
+# 24. Modify the text generation program to:
+# 24.1. Randomly choose from the n most likely words.
+# 24.2. Train the model on a corpus
+# 24.3. Train the model on a hybrid corpus
+
+# 25. Return UDHR languages that have a given string as a word.
+
+# 26. branching factor of the noun hypernym hierarchy?
+
+# 27. Compute average polysemy of n, v, adj & adv in WN.
+
+# 28. Rank pairs in order of decreasing similarity.
+
