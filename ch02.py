@@ -104,23 +104,15 @@ len([latin for latin in udhr.fileids() if latin.endswith('-Latin1')])
 len([utf8 for utf8 in udhr.fileids() if utf8.endswith('-UTF8')])
 #93
 [latin for latin in udhr.fileids() if 'french' in latin.lower()]
-['French_Francais-Latin1']
-
-languages = [
-    'English',
-    'French',
-    'German',
-    'Italian',
-    'Spanish',
-]
+#['French_Francais-Latin1']
 
 # Nested loop to get filenames.
+languages = ['English', 'French', 'German', 'Italian', 'Spanish' ]
 files = []
 for file in udhr.fileids():
     for lang in languages:
         if lang in file:
             files.append(file)
-
 # List comprehension of same:
 [file for file in udhr.fileids() for lang in languages if lang in file]
 
@@ -678,13 +670,13 @@ syllable_guess(adventure, dict, words) #1443
 # ^ That takes almost forever. :\
 from time import time
 start_time = time();
-    syllable_guess(adventure, dict, words);
-    print time() - start_time, "seconds"
+syllable_guess(adventure, dict, words);
+print time() - start_time, "seconds"
 #101.207468033 seconds - yep
-...; syllable_guess(scifi, dict, words); ... #42177
+syllable_guess(scifi, dict, words); #42177
 # 21.222469807 seconds
 
-# 22. String M between every Nth word in a text.
+# 22. Put string M between every Nth word in a text.
 def hedge(text, string='F00', n=3):
     hedge = []
     i = 0
@@ -798,8 +790,8 @@ humor = brown.words(categories='humor')
 generate_model(genesis + humor, 20, 9)
 learned = brown.words(categories='learned')
 generate_model(genesis + learned, 20, 9)
-# The book of Genesis is not as rich, so its words are always the most frequent,
-# but the additional, richer text "takes over" the end of the phrase.
+# Genesis is not as rich, so its words are the most frequent, and therefore
+# are the 1st words of the phrase.  But then the richer text "takes over."
 
 # 25. Return UDHR languages that have a given string as a word.
 
