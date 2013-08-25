@@ -794,6 +794,17 @@ generate_model(genesis + learned, 20, 9)
 # are the 1st words of the phrase.  But then the richer text "takes over."
 
 # 25. Return UDHR languages that have a given string as a word.
+from nltk.corpus import udhr
+def find_language(string):
+    langs = []
+    for file in udhr.fileids():
+        if file.endswith('-Latin1'):
+            print 'Checking', file + '...'
+            if string.lower() in [w.lower() for w in udhr.words(file)]:
+                langs.append(file)
+    print langs
+
+find_language('equal')
 
 # 26. branching factor of the noun hypernym hierarchy?
 
