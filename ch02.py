@@ -760,7 +760,7 @@ def generate_model(text, top=10, tokens=5):
     # Compute a conditional frequency distribution of adjacent word pairs.
     cfdist = nltk.ConditionalFreqDist(nltk.bigrams(words))
     # Generate a phrase for each of the top words.
-    for w in words[:top]:
+    for w in cfdist.keys()[:top]:
         # Produce a phrase.
         for i in range(tokens):
             print w,
@@ -769,15 +769,32 @@ def generate_model(text, top=10, tokens=5):
         # Output a newline at the end of a phrase.
         print
 
-words = nltk.corpus.gutenberg.words('carroll-alice.txt')
-generate_model(words)
-generate_model(words, 10, 10)
-words = nltk.corpus.genesis.words('english-kjv.txt')
-generate_model(words)
-generate_model(words, 10, 10)
+alice = nltk.corpus.gutenberg.words('carroll-alice.txt')
+generate_model(alice)
+generate_model(alice, 10, 10)
+genesis = nltk.corpus.genesis.words('english-kjv.txt')
+generate_model(genesis) # quasischizobiblical
+generate_model(genesis, 10, 1) # <- Hey! What the?
+#In
+#the
+#beginning
+#God
+#created
+#the
+#heaven
+#and
+#the
+#earth
+generate_model(genesis, 10, 10)
 
 # 24.2. Train the model on a corpus
+# XXX "Train?" This topic is not discussed, or even alluded to, in the chapter.
+from nltk.corpus import brown
+scifi = brown.words(categories=brown.categories()[-1])
+generate_model(scifi, 10, 10) #Now we do then Jack said softly and caught fascinating
+
 # 24.3. Train the model on a hybrid corpus
+generate_model(genesis + scifi, 20, 9) # <- 20, 9 word, hybrid phrases
 
 # 25. Return UDHR languages that have a given string as a word.
 
