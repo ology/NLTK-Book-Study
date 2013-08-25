@@ -759,17 +759,17 @@ plt.show()
 def generate_model(text, top=10, tokens=5):
     # Only consider the words ("alpha tokens") of more than one letter.
     words = [w.lower() for w in text if len(w) > 1 and w.isalpha() and not w.isupper()]
-    # Compute a frequency distribution of the non-stopwords.
+    # Compute the frequency distribution of non-stopwords.
     stopwords = nltk.corpus.stopwords.words('english')
     fdist = nltk.FreqDist([w for w in words if w.lower() not in stopwords])
-    # Compute a conditional frequency distribution of adjacent word pairs.
+    # Compute the conditional frequency distribution of adjacent word pairs.
     cfdist = nltk.ConditionalFreqDist(nltk.bigrams(words))
-    # Generate a phrase for each of the most frequent words.
+    # Generate a phrase for each of the most frequent non-stopwords.
     for w in fdist.keys()[:top]:
         # Produce a phrase.
         for i in range(tokens):
             print w,
-            # For the next word, choose one of the adjacent words.
+            # Choose a frequently adjacent word, for the next phrase word.
             w = random.choice(list(cfdist[w]))
         # Output a newline at the end of a phrase.
         print
@@ -779,17 +779,27 @@ generate_model(alice)
 generate_model(alice, 10, 10)
 genesis = nltk.corpus.genesis.words('english-kjv.txt')
 generate_model(genesis) # quasischizobiblical
-generate_model(genesis, 10, 1) # <-
-generate_model(genesis, 10, 10)
+generate_model(genesis, 10, 1) # <- Most frequent non-stopwords
+generate_model(genesis, 10, 9) # <- 10, 9 word phrases
 
 # 24.2. Train the model on a corpus
 # XXX "Train?" This topic is not discussed, or even alluded to, in the chapter.
 from nltk.corpus import brown
-scifi = brown.words(categories=brown.categories()[-1])
-generate_model(scifi, 10, 10) #Now we do then Jack said softly and caught fascinating
+scifi = brown.words(categories='science_fiction')
+generate_model(scifi, 10, 10)
 
 # 24.3. Train the model on a hybrid corpus
-generate_model(genesis + scifi, 20, 9) # <- 20, 9 word, hybrid phrases
+generate_model(genesis + scifi, 20, 9) # <- Sometimes non-sequitur-funny
+mystery = brown.words(categories='mystery')
+generate_model(genesis + mystery, 20, 9)
+adventure = brown.words(categories='adventure')
+generate_model(genesis + adventure, 20, 9)
+humor = brown.words(categories='humor')
+generate_model(genesis + humor, 20, 9)
+learned = brown.words(categories='learned')
+generate_model(genesis + learned, 20, 9)
+# The book of Genesis is not as rich, so its words are always the most frequent,
+# but the additional, richer text "takes over" the end of the phrase.
 
 # 25. Return UDHR languages that have a given string as a word.
 
