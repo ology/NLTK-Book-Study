@@ -754,9 +754,9 @@ plt.show()
 
 # 24. Modify the text generation program to:
 # 24.1. Generate a set of quasi-random phrases from the top N most likely words.
-def generate_model(text, top=10, tokens=5, sentences=10):
+def generate_model(text, top=10, tokens=5):
     # Only consider the words ("alpha tokens") of more than one letter.
-    words = [w for w in text if len(w) > 1 and w.isalpha()]
+    words = [w for w in text if len(w) > 1 and w.isalpha() and not w.isupper()]
     # Compute a conditional frequency distribution of adjacent word pairs.
     cfdist = nltk.ConditionalFreqDist(nltk.bigrams(words))
     # Generate a phrase for each of the top words.
