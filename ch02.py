@@ -733,6 +733,8 @@ plt.show()
 # 23.2. Tokenize a string of random words & plot as before.
 import random
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
 max = 0
 for w in nonhap:
     max += len(w)
@@ -757,8 +759,9 @@ plt.show()
 def generate_model(text, top=10, tokens=5):
     # Only consider the words ("alpha tokens") of more than one letter.
     words = [w.lower() for w in text if len(w) > 1 and w.isalpha() and not w.isupper()]
-    # Compute a frequency distribution of the words.
-    fdist = nltk.FreqDist(words)
+    # Compute a frequency distribution of the non-stopwords.
+    stopwords = nltk.corpus.stopwords.words('english')
+    fdist = nltk.FreqDist([w for w in words if w.lower() not in stopwords])
     # Compute a conditional frequency distribution of adjacent word pairs.
     cfdist = nltk.ConditionalFreqDist(nltk.bigrams(words))
     # Generate a phrase for each of the most frequent words.
