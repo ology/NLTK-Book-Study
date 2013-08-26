@@ -808,28 +808,45 @@ find_language('equal')
 
 # 26. branching factor of the noun hypernym hierarchy?
 from nltk.corpus import wordnet as wn
-syns = wn.all_synsets('n')
-syns #<generator object all_synsets at 0x105fa1d70>
-len(list(syns)) #82115
-hypo_num  = 0
-hypo_sum  = 0
-hyper_num = 0
-hyper_sum = 0
-for syn in wn.all_synsets('n'):
-    if len(syn.hyponyms()):
-        hypo_num += 1
-        hypo_sum += len(syn.hyponyms())
-    if len(syn.hypernyms()):
-        hyper_num += 1
-        hyper_sum += len(syn.hypernyms())
-    #print '%s - Hyponyms: %d, Hypernyms: %d' % (syn.lemmas[0].name, len(syn.hyponyms()), len(syn.hypernyms()))
+def branch_factor(pos='n'):
+    # Initialize the counters.
+    hypo_num = 0
+    hypo_sum = 0
+    hyper_num = 0
+    hyper_sum = 0
+    # Tally the hyp*s for each synset.
+    for syn in wn.all_synsets(pos):
+        hypo_len = len(syn.hyponyms())
+        hyper_len = len(syn.hypernyms())
+        if hypo_len:
+            hypo_num += 1
+            hypo_sum += hypo_len
+        if hyper_len:
+            hyper_num += 1
+            hyper_sum += hypo_len
+        print '%s - Hyponyms: %d, Hypernyms: %d' % (syn.lemmas[0].name, hypo_len, hyper_len)
+    # Compute the averages.
+    hypo_avg  = 0 if hypo_num == 0  else hypo_sum / hypo_num
+    hyper_avg = 0 if hyper_num == 0 else hyper_sum / hyper_num
+    # Output the results.
+    print 'POS: %s, Hyponyms: n=%d, t=%d, avg=%.3f'  % (pos, hypo_num, hypo_sum, hypo_avg)
+    print 'POS: %s, Hypernyms: n=%d, t=%d, avg=%.3f' % (pos, hyper_num, hyper_sum, hyper_avg)
 
-print 'Hyponyms: n=%d, t=%d, avg=%.3f' % (hypo_num, hypo_sum, hypo_sum / hypo_num)
-#Hyponyms: n=16693, t=75850, avg=4.544
-print 'Hypernyms: n=%d, t=%d, avg=%.3f' % (hyper_num, hyper_sum, hyper_sum / hyper_num)
-#Hypernyms: n=74389, t=75850, avg=1.020
+branch_factor()
+#POS: n, Hyponyms: n=16693, t=75850, avg=4.544
+#POS: n, Hypernyms: n=74389, t=75831, avg=1.019
 
 # 27. Compute average polysemy of n, v, adj & adv in WN.
+branch_factor(pos=wn.VERB)
+#POS: v, Hyponyms: n=3315, t=13239, avg=3.994
+#POS: v, Hypernyms: n=13208, t=9949, avg=0.753
+branch_factor(pos=wn.ADV)
+#POS: a, Hyponyms: n=0, t=0, avg=0.000
+#POS: a, Hypernyms: n=0, t=0, avg=0.000
+branch_factor(pos=wn.ADJ)
+#POS: a, Hyponyms: n=0, t=0, avg=0.000
+#POS: a, Hypernyms: n=0, t=0, avg=0.000
+# XXX r & a == 0?
 
 # 28. Rank pairs in order of decreasing similarity.
 
