@@ -807,6 +807,27 @@ def find_language(string):
 find_language('equal')
 
 # 26. branching factor of the noun hypernym hierarchy?
+from nltk.corpus import wordnet as wn
+syns = wn.all_synsets('n')
+syns #<generator object all_synsets at 0x105fa1d70>
+len(list(syns)) #82115
+hypo_num  = 0
+hypo_sum  = 0
+hyper_num = 0
+hyper_sum = 0
+for syn in wn.all_synsets('n'):
+    if len(syn.hyponyms()):
+        hypo_num += 1
+        hypo_sum += len(syn.hyponyms())
+    if len(syn.hypernyms()):
+        hyper_num += 1
+        hyper_sum += len(syn.hypernyms())
+    #print '%s - Hyponyms: %d, Hypernyms: %d' % (syn.lemmas[0].name, len(syn.hyponyms()), len(syn.hypernyms()))
+
+print 'Hyponyms: n=%d, t=%d, avg=%.3f' % (hypo_num, hypo_sum, hypo_sum / hypo_num)
+#Hyponyms: n=16693, t=75850, avg=4.544
+print 'Hypernyms: n=%d, t=%d, avg=%.3f' % (hyper_num, hyper_sum, hyper_sum / hyper_num)
+#Hypernyms: n=74389, t=75850, avg=1.020
 
 # 27. Compute average polysemy of n, v, adj & adv in WN.
 
