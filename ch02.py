@@ -851,6 +851,8 @@ branch_factor(pos=wn.ADJ)
 # 28. Rank pairs in order of decreasing similarity.
 string = 'car-automobile, gem-jewel, journey-voyage, boy-lad, coast-shore, asylum-madhouse, magician-wizard, midday-noon, furnace-stove, food-fruit, bird-cock, bird-crane, tool-implement, brother-monk, lad-brother, crane-implement, journey-car, monk-oracle, cemetery-woodland, food-rooster, coast-hill, forest-graveyard, shore-woodland, monk-slave, coast-forest, lad-wizard, chord-smile, glass-magician, rooster-voyage, noon-string'
 pairs = string.split(', ')
+# TODO Split on ',' and then trim instead?
+# TODO Make a dict of the pairs with path_similarity as value. Then sort!
 for item in pairs:
     pair = list(item.split('-'))
     i = wn.synsets(pair[0])[0]
