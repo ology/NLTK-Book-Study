@@ -841,12 +841,22 @@ branch_factor(pos=wn.VERB)
 #POS: v, Hyponyms: n=3315, t=13239, avg=3.994
 #POS: v, Hypernyms: n=13208, t=9949, avg=0.753
 branch_factor(pos=wn.ADV)
-#POS: a, Hyponyms: n=0, t=0, avg=0.000
-#POS: a, Hypernyms: n=0, t=0, avg=0.000
+#POS: r, Hyponyms: n=0, t=0, avg=0.000
+#POS: r, Hypernyms: n=0, t=0, avg=0.000
 branch_factor(pos=wn.ADJ)
 #POS: a, Hyponyms: n=0, t=0, avg=0.000
 #POS: a, Hypernyms: n=0, t=0, avg=0.000
 # XXX r & a == 0?
 
 # 28. Rank pairs in order of decreasing similarity.
+string = 'car-automobile, gem-jewel, journey-voyage, boy-lad, coast-shore, asylum-madhouse, magician-wizard, midday-noon, furnace-stove, food-fruit, bird-cock, bird-crane, tool-implement, brother-monk, lad-brother, crane-implement, journey-car, monk-oracle, cemetery-woodland, food-rooster, coast-hill, forest-graveyard, shore-woodland, monk-slave, coast-forest, lad-wizard, chord-smile, glass-magician, rooster-voyage, noon-string'
+pairs = string.split(', ')
+for item in pairs:
+    pair = list(item.split('-'))
+    i = wn.synsets(pair[0])[0]
+    j = wn.synsets(pair[1])[0]
+    print i, j, i.lowest_common_hypernyms(j), i.path_similarity(j)
+#Synset('car.n.01') Synset('car.n.01') [Synset('car.n.01')] 1.0
+#...
+#Synset('noon.n.01') Synset('string.n.01') [Synset('entity.n.01')] 0.0588235294118
 
