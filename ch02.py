@@ -869,10 +869,10 @@ sims
 #{'midday-noon': 1.0, 'cemetery-woodland': 0.1111111111111111, 'journey-car': 0.05, 'crane-implement': 0.1, 'noon-string': 0.058823529411764705, 'bird-crane': 0.1111111111111111, 'glass-magician': 0.1111111111111111, 'forest-graveyard': 0.07142857142857142, 'brother-monk': 0.125, 'monk-oracle': 0.125, 'chord-smile': 0.09090909090909091, 'bird-cock': 0.0625, 'food-fruit': 0.09090909090909091, 'boy-lad': 0.3333333333333333, 'furnace-stove': 0.07692307692307693, 'coast-hill': 0.2, 'lad-wizard': 0.2, 'monk-slave': 0.2, 'asylum-madhouse': 0.125, 'tool-implement': 0.5, 'shore-woodland': 0.2, 'lad-brother': 0.14285714285714285, 'magician-wizard': 0.16666666666666666, 'journey-voyage': 0.25, 'coast-forest': 0.09090909090909091, 'gem-jewel': 0.125, 'rooster-voyage': 0.041666666666666664, 'food-rooster': 0.0625, 'coast-shore': 0.5, 'car-automobile': 1.0}
 
 # http://stackoverflow.com/questions/3417760/how-to-sort-a-python-dict-by-value
-list(sorted(sims, key=sims.__getitem__, reverse=True)) # XXX Ugh
+list(sorted(sims, key=sims.__getitem__, reverse=True)) # XXX Too advanced for ch2 ;)
 #['midday-noon', 'car-automobile', 'tool-implement', 'coast-shore', 'boy-lad', 'journey-voyage', 'coast-hill', 'lad-wizard', 'monk-slave', 'shore-woodland', 'magician-wizard', 'lad-brother', 'brother-monk', 'monk-oracle', 'asylum-madhouse', 'gem-jewel', 'cemetery-woodland', 'bird-crane', 'glass-magician', 'crane-implement', 'chord-smile', 'food-fruit', 'coast-forest', 'furnace-stove', 'forest-graveyard', 'bird-cock', 'food-rooster', 'noon-string', 'journey-car', 'rooster-voyage']
 
-# Build a list of string pairs, sorted by path_similarity.
+# Build a list of string pairs, sorted by path_similarity || alpha of pair.
 path_sims = []
 for item in pairs:
     pair = list(item.split('-'))
@@ -881,6 +881,14 @@ for item in pairs:
     k = i.path_similarity(j)
     path_sims.insert(0, (round(k, 4), item)) # XXX Does not prepend?
 
-path_sims.sort(reverse=True)
-path_sims
+def or_cmp(a, b):
+    x = 0
+    if a[0] == b[0]:
+        x = cmp(b[1], a[1])
+    else:
+        x = cmp(a[0], b[0])
+    return x
+
+sorted(path_sims, cmp=or_cmp, reverse=True)
+#[(1.0, 'car-automobile'), (1.0, 'midday-noon'), (0.5, 'coast-shore'), (0.5, 'tool-implement'), (0.3333, 'boy-lad'), (0.25, 'journey-voyage'), (0.2, 'coast-hill'), (0.2, 'lad-wizard'), (0.2, 'monk-slave'), (0.2, 'shore-woodland'), (0.1667, 'magician-wizard'), (0.1429, 'lad-brother'), (0.125, 'asylum-madhouse'), (0.125, 'brother-monk'), (0.125, 'gem-jewel'), (0.125, 'monk-oracle'), (0.1111, 'bird-crane'), (0.1111, 'cemetery-woodland'), (0.1111, 'glass-magician'), (0.1, 'crane-implement'), (0.0909, 'chord-smile'), (0.0909, 'coast-forest'), (0.0909, 'food-fruit'), (0.0769, 'furnace-stove'), (0.0714, 'forest-graveyard'), (0.0625, 'bird-cock'), (0.0625, 'food-rooster'), (0.0588, 'noon-string'), (0.05, 'journey-car'), (0.0417, 'rooster-voyage')]
 
