@@ -14,6 +14,8 @@ def inspect(it):
         print 'chars'
     elif isinstance(it, list):
         print 'elements'
+    elif isinstance(it, nltk.text.Text):
+        print 'nltk tokens'
 
 from urllib import urlopen
 url = "http://www.gutenberg.org/files/2554/2554.txt"
@@ -27,3 +29,8 @@ raw[31:73] #'Crime and Punishment, by Fyodor Dostoevsky'
 tokens = nltk.word_tokenize(raw)
 inspect(tokens) #type=list, len=244484 elements
 tokens[5:12] #['Crime', 'and', 'Punishment', ',', 'by', 'Fyodor', 'Dostoevsky']
+
+text = nltk.Text(tokens)
+inspect(text) #type=Text, len=244484 nltk tokens
+text[982:1019] #['CHAPTER', 'I', 'On', 'an', 'exceptionally', 'hot', 'evening', 'early', 'in', 'July', 'a', 'young', 'man', 'came', 'out', 'of', 'the', 'garret', 'in', 'which', 'he', 'lodged', 'in', 'S.', 'Place', 'and', 'walked', 'slowly', ',', 'as', 'though', 'in', 'hesitation', ',', 'towards', 'K.', 'bridge.']
+
