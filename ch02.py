@@ -879,7 +879,8 @@ for item in pairs:
     i = wn.synsets(pair[0])[0]
     j = wn.synsets(pair[1])[0]
     k = i.path_similarity(j)
-    path_sims.insert(0, (k, item)) # XXX Does not prepend?
+    path_sims.insert(0, (round(k, 4), item)) # XXX Does not prepend?
 
 path_sims.sort(reverse=True)
+path_sims
 
