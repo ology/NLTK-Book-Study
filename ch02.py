@@ -852,13 +852,34 @@ branch_factor(pos=wn.ADJ)
 string = 'car-automobile, gem-jewel, journey-voyage, boy-lad, coast-shore, asylum-madhouse, magician-wizard, midday-noon, furnace-stove, food-fruit, bird-cock, bird-crane, tool-implement, brother-monk, lad-brother, crane-implement, journey-car, monk-oracle, cemetery-woodland, food-rooster, coast-hill, forest-graveyard, shore-woodland, monk-slave, coast-forest, lad-wizard, chord-smile, glass-magician, rooster-voyage, noon-string'
 pairs = string.split(', ')
 # TODO Split on ',' and then trim instead?
-# TODO Make a dict of the pairs with path_similarity as value. Then sort!
+# Make a dict of the pairs with path_similarity as value.
+# Then sort by value, then sort by key.
+sims = dict()
 for item in pairs:
     pair = list(item.split('-'))
     i = wn.synsets(pair[0])[0]
     j = wn.synsets(pair[1])[0]
+    sims[item] = i.path_similarity(j)
     print i, j, i.lowest_common_hypernyms(j), i.path_similarity(j)
 #Synset('car.n.01') Synset('car.n.01') [Synset('car.n.01')] 1.0
 #...
 #Synset('noon.n.01') Synset('string.n.01') [Synset('entity.n.01')] 0.0588235294118
+
+sims
+#{'midday-noon': 1.0, 'cemetery-woodland': 0.1111111111111111, 'journey-car': 0.05, 'crane-implement': 0.1, 'noon-string': 0.058823529411764705, 'bird-crane': 0.1111111111111111, 'glass-magician': 0.1111111111111111, 'forest-graveyard': 0.07142857142857142, 'brother-monk': 0.125, 'monk-oracle': 0.125, 'chord-smile': 0.09090909090909091, 'bird-cock': 0.0625, 'food-fruit': 0.09090909090909091, 'boy-lad': 0.3333333333333333, 'furnace-stove': 0.07692307692307693, 'coast-hill': 0.2, 'lad-wizard': 0.2, 'monk-slave': 0.2, 'asylum-madhouse': 0.125, 'tool-implement': 0.5, 'shore-woodland': 0.2, 'lad-brother': 0.14285714285714285, 'magician-wizard': 0.16666666666666666, 'journey-voyage': 0.25, 'coast-forest': 0.09090909090909091, 'gem-jewel': 0.125, 'rooster-voyage': 0.041666666666666664, 'food-rooster': 0.0625, 'coast-shore': 0.5, 'car-automobile': 1.0}
+
+# http://stackoverflow.com/questions/3417760/how-to-sort-a-python-dict-by-value
+list(sorted(sims, key=sims.__getitem__, reverse=True)) # XXX Ugh
+#['midday-noon', 'car-automobile', 'tool-implement', 'coast-shore', 'boy-lad', 'journey-voyage', 'coast-hill', 'lad-wizard', 'monk-slave', 'shore-woodland', 'magician-wizard', 'lad-brother', 'brother-monk', 'monk-oracle', 'asylum-madhouse', 'gem-jewel', 'cemetery-woodland', 'bird-crane', 'glass-magician', 'crane-implement', 'chord-smile', 'food-fruit', 'coast-forest', 'furnace-stove', 'forest-graveyard', 'bird-cock', 'food-rooster', 'noon-string', 'journey-car', 'rooster-voyage']
+
+# Build a list of string pairs, sorted by path_similarity.
+path_sims = []
+for item in pairs:
+    pair = list(item.split('-'))
+    i = wn.synsets(pair[0])[0]
+    j = wn.synsets(pair[1])[0]
+    k = i.path_similarity(j)
+    path_sims.insert(0, (k, item)) # XXX Does not prepend?
+
+path_sims.sort(reverse=True)
 
