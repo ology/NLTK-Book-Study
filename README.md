@@ -1,4 +1,4 @@
 NLTK Book
 =========
 
-Enhanced self-study of http://nltk.org/book/
+Enhanced self-study of http://www.nltk.org/book_1ed/
