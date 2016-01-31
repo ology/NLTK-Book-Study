@@ -5,7 +5,7 @@ from __future__ import division
 
 # ------------------------------------------------------------------------------
 # Work through the http://nltk.org/book/
-# -- gene + github at ology dot net not dot com
+# -- gene at ology dot net not dot com
 #
 # Handy links:
 # http://nltk.org/

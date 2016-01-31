@@ -5,7 +5,7 @@ import nltk, re, pprint
 
 # ------------------------------------------------------------------------------
 # Work through http://nltk.org/book/ch03.html
-# -- gene + github at ology dot net not dot com
+# -- gene at ology dot net not dot com
 # ------------------------------------------------------------------------------
 
 def inspect(it):

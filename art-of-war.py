@@ -3,7 +3,7 @@
 
 # -----------------------------------------------------------------------------#
 # Art of War analysis based on http://nltk.org/book/ concepts.
-# -- gene + github at ology dot net not dot com
+# -- gene at ology dot net not dot com
 # -----------------------------------------------------------------------------#
 
 # Import functionality.

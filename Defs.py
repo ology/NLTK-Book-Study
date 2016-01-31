@@ -2,7 +2,7 @@
 # -- coding: utf-8 -- 
 #
 # Subroutine defs inspired by http://nltk.org/book/
-# -- gene + github at ology dot net not dot com
+# -- gene at ology dot net not dot com
 #
 
 # Import functionality.
